@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Psi ML"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/spstolar
+      - icon: twitter
+        href: https://twitter.com/psistolar
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+
+

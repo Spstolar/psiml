@@ -1,0 +1,2 @@
+quarto preview
+quarto render

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-07-11">
+<meta name="description" content="A minimal example of using markdown with fastpages.">
+
+<title>Psi ML - FastAI Book Chapter 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Psi ML</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/spstolar"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/psistolar"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">FastAI Book Chapter 2</h1>
+                  <div>
+        <div class="description">
+          A minimal example of using markdown with fastpages.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">markdown</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 11, 2020</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#fastai-book-chapter-2" id="toc-fastai-book-chapter-2" class="nav-link active" data-scroll-target="#fastai-book-chapter-2">FastAI Book Chapter 2</a>
+  <ul class="collapse">
+  <li><a href="#things-i-learned" id="toc-things-i-learned" class="nav-link" data-scroll-target="#things-i-learned">Things I Learned</a></li>
+  <li><a href="#things-i-had-to-troubleshoot" id="toc-things-i-had-to-troubleshoot" class="nav-link" data-scroll-target="#things-i-had-to-troubleshoot">Things I Had to Troubleshoot</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="fastai-book-chapter-2" class="level1">
+<h1>FastAI Book Chapter 2</h1>
+<p>I went through the second chapter of the book today, which is why this blog even exists. Highly useful; looking forward to working on some music projects to really learn the material.</p>
+<section id="things-i-learned" class="level2">
+<h2 class="anchored" data-anchor-id="things-i-learned">Things I Learned</h2>
+<ul>
+<li>How to easily build an image classifier to discern between blue jays, mockingbirds, and shrikes.</li>
+</ul>
+<p>I chose the first two bird types based on my familiarity and their Cool Local Bird ranks. I was going to select a cardinal as a third class, but thought it would be too easy to detect the class based solely on color, so I searched around and found shrikes, which looked similar to mockingbirds. The classifier performed very well, which was I semi-shock because I didn’t know:</p>
+<ul>
+<li>You do not always need a lot of data to build a decent model.</li>
+</ul>
+<p>Even with 150 examples of each of three classes (before train/validation split), there were only 3 misclassifications on the validation set. This shows how powerful data augmentation can be, but also helps dispel the notion that you need tons of data to do anything reasonable.</p>
+<ul>
+<li>FastAI has some powerful tools that I need to learn.</li>
+</ul>
+<ol type="1">
+<li>Easily display the examples with the highest loss and lowest confidence to see if I can interpret possible deficiencies with <code>interp.plot_top_losses()</code>.</li>
+<li>Clean up the dataset with <code>ImageClassifierCleaner</code>, manually going through some of the examples to change labels or remove them, and then effect the changes with a couple simple for-loops.</li>
+<li>Use <code>verify_images</code> to clean up corrupted files easily.</li>
+<li>Use <code>DataBlock</code> to define the structure of the problem and implement useful transformations for the data.</li>
+</ol>
+<ul>
+<li>Think about how to normalize images.</li>
+</ul>
+<p>Squashing a large image into a smaller one with simple scaling or adding cropped parts of small images is maybe not the best way to make sure the inputs are all “from the same distribution”. You can use <code>RandomResizedCrop</code> to maintain original image quality and also artificially expand the size of your training set.</p>
+<ul>
+<li>Other things:
+<ul>
+<li>How to easily build a dataset with the Bing Image API.</li>
+<li>The usefulness of Path (which I only recently learned about) was really demonstrated nicely.</li>
+<li>The Drivetrain Approach.</li>
+<li>Creating a Notebook App with widgets and Voilà. (Admittedly, I’m still trying to get the latter to work.)</li>
+</ul></li>
+</ul>
+</section>
+<section id="things-i-had-to-troubleshoot" class="level2">
+<h2 class="anchored" data-anchor-id="things-i-had-to-troubleshoot">Things I Had to Troubleshoot</h2>
+<ul>
+<li>How do you find the Bing Image Search key?</li>
+</ul>
+<p>Solution: I signed up for the free Azure thing, went to to the <a href="https://azure.microsoft.com/en-us/services/cognitive-services/bing-image-search-api/">Bing Image Search API</a>, and just had to click to add Bing Search APIs v7 to my subscription. Once I did this it brought up a page with the keys and endpoints.</p>
+<ul>
+<li>I am using my local computer, with Windows, to run the notebooks. So, I have run into (standard) issues. Namely, I saw <code>RuntimeError: cuda runtime error (801) : operation not supported at...</code> when I first attempted to fine tune the learner <code>learn.fine_tune(4)</code>.</li>
+</ul>
+<p>Solution: When you google the error <a href="https://github.com/fastai/fastbook/issues/85">this issue page</a> points you to the forum, but also usefully mentions the “need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.” So, doing this when you define the dataloaders <code>dls = bears.dataloaders(path, num_workers=0)</code> cleared it up for me.</p>
+<ul>
+<li>Some minor formatting issues with <code>interp.plot_top_losses(5, nrows=1)</code>. The text above the images was overlapping, because my class names were a bit long.</li>
+</ul>
+<p>Simple fix was to set <code>nrows=5</code>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
