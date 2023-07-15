@@ -1,16 +1,17 @@
 project:
   type: website
   output-dir: docs
+  preview:
+    port: 7777
 
 website:
-  title: "Psi ML"
+  title: "\u03C8ML"
   navbar:
     right:
       - about.qmd
+      - header/refs.qmd
       - icon: github
         href: https://github.com/spstolar
-      - icon: twitter
-        href: https://twitter.com/psistolar
 format:
   html:
     theme: 

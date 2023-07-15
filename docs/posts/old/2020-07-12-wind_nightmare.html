@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-02-12">
+<meta name="dcterms.date" content="2020-07-12">
+<meta name="description" content="A minimal example of using markdown with fastpages.">
 
-<title>Psi ML - Common Command and Setup Cheatsheet</title>
+<title>ψML - Solving a Nightmare with a Headache</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,24 +25,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,18 +64,18 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Psi ML</span>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ψML</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -83,15 +84,13 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html">About</a>
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../header/refs.html">Refs</a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/spstolar"><i class="bi bi-github" role="img">
-</i> 
- </a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/psistolar"><i class="bi bi-twitter" role="img">
 </i> 
  </a>
   </li>  
@@ -108,8 +107,16 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Common Command and Setup Cheatsheet</h1>
-                      </div>
+      <h1 class="title">Solving a Nightmare with a Headache</h1>
+                  <div>
+        <div class="description">
+          A minimal example of using markdown with fastpages.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">markdown</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -119,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 12, 2022</p>
+        <p class="date">July 12, 2020</p>
       </div>
     </div>
       
@@ -129,38 +136,31 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#solving-a-nightmare-with-a-headache" id="toc-solving-a-nightmare-with-a-headache" class="nav-link active" data-scroll-target="#solving-a-nightmare-with-a-headache">Solving a Nightmare with a Headache</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="common-command-and-setup-cheatsheet" class="level1">
-<h1>Common Command and Setup Cheatsheet</h1>
-<section id="terminal-shortcuts" class="level2">
-<h2 class="anchored" data-anchor-id="terminal-shortcuts">terminal shortcuts</h2>
-<ul>
-<li>ctrl + P = previous command</li>
-<li>ctrl + u = erase line before cursor</li>
-<li>ctrl + l = refresh screen</li>
-</ul>
-</section>
-<section id="general-linux-shortcuts" class="level2">
-<h2 class="anchored" data-anchor-id="general-linux-shortcuts">general linux shortcuts</h2>
-<ul>
-<li>ctrl + alt + t = new terminal window</li>
-</ul>
-</section>
-<section id="setting-up-vim" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-vim">setting up Vim</h2>
-<ul>
-<li><code>sudo apt install vim</code></li>
-<li>in <code>.vimrc</code> add `:inoremap jk <esc></esc></li>
-</ul>
+<section id="solving-a-nightmare-with-a-headache" class="level1">
+<h1>Solving a Nightmare with a Headache</h1>
+<p><strong>Issue</strong>: The widgets in Jupyter Notebook were not all displaying.</p>
+<p><strong>Non-solution</strong>: Try re-do some installs in the virtualenv. While I am at it, let’s also try out pyenv.</p>
+<p><strong>New Issue</strong>: Windows does not play well with pyenv. You can get pyenv to work, but then virtualenv is no longer set up on your global environment.</p>
+<p><strong>Attempted Solution</strong>: Try to clone the pyenv-virtualenv repo into a new plugins directory of the pyenv root folder. This did not work, despite sinking about an hour into this whole mess.</p>
+<p><strong>New Issue</strong>: It’s time to put Linux on my machine to try and escape some of these Windows nightmares. This is going to be a headache, but it seems like the pay off will be worth-while, given that the Fastbook also doesn’t play well with Windows. I have been frustrated with doing Python things on Windows before so I had Linux available already. I will note that it took be a while to remember I already had a Linux partition and in a cascading wave of failure, I forgot my linux password, so was not able to run a needed sudo command. But, I got lucky again (and this is a yikes security-wise) and it turns out you can easily reset the password for Ubuntu.</p>
+<p>From here I followed <a href="https://realpython.com/intro-to-pyenv/#virtual-environments-and-pyenv">Real Python’s primer on pyenv</a>. Setting this up was not bad and putting some lines in .bashrc virtualenv becomes much nicer to use. It allows you connect a particular environment to a folder. I created a virtualenv named <code>fab</code> (FastAI Book, short environment names are good when you’re used to activating an environment every time you want to work on something) by again <a href="https://realpython.com/python-virtual-environments-a-primer/">following Real Python</a> and now it is automatically activated when I am in the fastbook directory. A quick <code>pip install -r requirements.txt -v</code> got the environment running smoothly with the notebook for Chapter 1, and things that did not work 100% in Windows worked in my Linux boot nicely (at least after a <code>sudo apt install graphviz</code>): * I could run the cells without having to change <code>num_workers</code> to 0. * My GPU was visible to Torch (<code>torch.cuda.get_device_name(0)</code> returned the name of my GPU). * The text example, which did not work at all on Windows, ran. * And, the whole reason I started this endeavor: when I created the <code>FileUploader</code> widget, it appeared in the notebook.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

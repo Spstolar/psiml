@@ -1,5 +1,5 @@
 ---
-title: "Psi ML"
+title: "\u03C8ML"
 listing:
   contents: posts
   sort: "date desc"

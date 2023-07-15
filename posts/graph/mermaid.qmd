@@ -1,0 +1,276 @@
+---
+title: Intro to Mermaid
+date: 2023-07-15
+---
+
+## What's Mermaid
+
+[Mermaid](https://mermaid.js.org/) is a tool that lets you create markdown-type
+descriptions of graphs/flowcharts and converts them to diagrams.
+
+As an example:
+
+```md
+graph LR;
+    A--> B & C & D;
+    B--> A & E;
+    C--> A & E;
+    C--> A & E;
+    E--> B & C & D;
+```
+
+becomes this when rendered:
+
+```{mermaid}
+graph LR;
+    A--> B & C & D;
+    B--> A & E;
+    C--> A & E;
+    C--> A & E;
+    E--> B & C & D;
+```
+
+It's possible to dynamically edit them with VSCode extensions or with online
+editors.
+
+This is great for visualizing small graphs and programtically producing flow
+charts. Manually creating a flowchart is painful enough, not too mention having
+to maintain it as the inevitable changes roll in. Keeping the diagram in code
+reduces these headaches.
+
+## Examples
+
+To use these in markdown, put them in a code block with type `mermaid` (or type `{mermaid}` if using Quarto). Meaning, put the the example (`stuff`) like this (replacing the single quotes `'` with backticks ` because making markdown examples in markdown is difficult):
+
+```markdown
+'''mermaid
+stuff
+'''
+```
+
+### Minimal
+
+```{mermaid}
+graph LR;
+    A;
+```
+
+```md
+graph LR;
+    A;
+```
+
+You have to say:
+
+* `graph` - this is a graph-type diagram
+* `LR` - nodes are produced left to right. Without this orientation it bugs out.
+* `A;` - the first node has the label "A"
+
+
+### Decision Flowchart
+
+```{mermaid}
+graph TB;
+    Start-->|evaluate| Consider;
+    Consider--certain--> Done;
+    Consider--uncertain--> mr[More Research];
+    mr -->|re-evaluate| Consider;
+```
+
+```md
+graph TB;
+    Start-->|evaluate| Consider;
+    Consider-->|certain| Done;
+    Consider-->|uncertain| mr[More Research];
+    mr -->|re-evaluate| Consider;
+```
+
+* `graph` and `flowchart` are interchangeable diagram types
+* `id[longer description]` allows you to alias the contents of a node (and also handles spaces in node labels
+* `-->|edge label|` provides a text label for an edge
+
+### Larger Graph
+
+```{mermaid}
+graph LR;
+    a --- b;
+    a --- b;
+    b --- c;
+    a --- c;
+    c --- d;
+    d --- e;
+    e --- f;
+    c --- f;
+    g --- h;
+    g --- i;
+    g --- j;
+    g --- k;
+    i --- i1;
+    i --- i2;
+    i --- i3;
+    i --- i4;
+```
+
+```md
+graph LR;
+    a --- b;
+    a --- b;
+    b --- c;
+    a --- c;
+    c --- d;
+    d --- e;
+    e --- f;
+    c --- f;
+    g --- h;
+    g --- i;
+    g --- j;
+    g --- k;
+    i --- i1;
+    i --- i2;
+    i --- i3;
+    i --- i4;
+```
+
+* we use `---` for undirected edges and `-->` for directed
+* the graph can be disconnected
+* you can have multiple edges between nodes (a and b here)
+
+## Application: Scrape Python Code to Generate a Dependency Graph
+
+Let's say you have some code where you want to show which modules or calling which other modules. This is nicely described using a dependency graph. For example:
+
+```{mermaid}
+graph LR;
+        main --> worker;
+        helper_2 --> numpy;
+        worker --> helper_1;
+        worker --> helper_2;
+```
+
+This tells us the main function calls the worker, the worker calls two helpers, and one of the helpers calls `numpy`. Generating this by hand would be a nuisance! Not only to just go through all of the files and read the imports then open up your least favorite flow chart tool (powerpoint). Then, what happens if the code changes (which happens more than you think)?
+
+Luckily, it's easy to create a parser and a script to generate the Mermaid description of the code.
+
+To show how, let's double-down and demonstrate a quick parser by first viewing the parser dependencies using the parser itself:
+
+```{mermaid}
+graph LR;
+        py_code_scraper[py_code_scraper] --> os[os];
+        py_code_scraper[py_code_scraper] --> import_finder[import_finder];
+        import_finder[import_finder] --> re[re];
+        create_python_code_g[create_python_code_graph] --> pathlib[pathlib];
+        create_python_code_g[create_python_code_graph] --> py_code_scraper[py_code_scraper];
+        create_python_code_g[create_python_code_graph] --> generate_mermaid_des[generate_mermaid_desc];
+```
+
+Then we have these four snippets comprising a simple parser and Mermaid dependency graph description:
+
+1. `create_python_code_graph.py`
+
+```python
+from pathlib import Path
+from py_code_scraper import scrape_module_graph
+from generate_mermaid_desc import generate_desc
+
+code_directory = Path(".")
+module_graph_edges = scrape_module_graph(code_directory)
+mermaid_desc = generate_desc(module_graph_edges)
+
+print(mermaid_desc)
+```
+
+2. `py_code_scraper.py`
+
+```python
+import os
+from import_finder import find_imports
+
+
+def scrape_module_graph(dir_name):
+    module_graph = []
+    for file in os.listdir(dir_name):
+        if file.endswith("py"):
+            code_file = dir_name / file
+            module_name = file.split(".")[0]
+            with open(code_file, "r") as f:
+                imported_modules = find_imports(f.readlines())
+                edges = [(module_name, import_module) for import_module in imported_modules]
+                if edges:
+                    module_graph.extend(edges)
+    return module_graph
+```
+
+3. `generate_mermaid_desc.py`
+
+```python
+def update_module_name_lookup(module_name, module_lookup_dict):
+    if len(module_name) > 20:
+        module_lookup_dict[module_name] = module_name[:20]
+    else:
+        module_lookup_dict[module_name] = module_name
+
+def generate_desc(import_graph_edges):
+    contents = []
+    header = "```{mermaid}"
+    figure_type = "graph LR;"
+    footer = "```"
+    contents.append(header)
+    contents.append(figure_type)
+    module_lookup = {}
+    for (s, t) in import_graph_edges:
+        s_name = module_lookup.get(s, "")
+        t_name = module_lookup.get(t, "")
+        if not s_name:
+            update_module_name_lookup(s, module_lookup)
+            s_name = module_lookup[s]
+        if not t_name:
+            update_module_name_lookup(t, module_lookup)
+            t_name = module_lookup[t]
+
+        edge_line = f"\t{s_name}[{s}] --> {t_name}[{t}];"
+        contents.append(edge_line)
+    contents.append(footer)
+    return "\n".join(contents)
+```
+
+4. `import_finder.py`
+
+```python
+import re
+
+
+def find_imports(code):
+    import_list = []
+    for line in code:
+        if line.startswith("import"):
+            import_parts = line.split(" ")
+            imported_module = import_parts[1].strip()
+            import_list.append(imported_module)
+        if line.startswith("from"):
+            import_parts = line.split(" ")
+            imported_module = import_parts[1].strip()
+            import_list.append(imported_module)
+    return import_list
+```
+
+So, when running the dependency graph creator on itself we get:
+
+```md
+graph LR;
+        py_code_scraper[py_code_scraper] --> os[os];
+        py_code_scraper[py_code_scraper] --> import_finder[import_finder];
+        import_finder[import_finder] --> re[re];
+        create_python_code_g[create_python_code_graph] --> pathlib[pathlib];
+        create_python_code_g[create_python_code_graph] --> py_code_scraper[py_code_scraper];
+        create_python_code_g[create_python_code_graph] --> generate_mermaid_des[generate_mermaid_desc];
+```
+
+Fairly straight-forward, if not full-featured (for instance, I'm not handling folder crawling here or providing more detail on the dependencies). But this shows you how you can quickly hack together an automated graph descriptions.
+
+If you are interested in this particular use case, there is a similar tool to create a dependency graph figure with Python (though it doesn't use Mermaid from what I can see) called [`pydeps`](https://github.com/thebjorn/pydeps) and I'm sure if you search more you can find one that does created the Mermaid description.
+
+## References
+
+* [Mermaid docs](https://mermaid.js.org/intro/)
+* [Graph Syntax](https://mermaid.js.org/syntax/flowchart.html)
+

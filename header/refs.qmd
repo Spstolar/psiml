@@ -1,0 +1,27 @@
+---
+title: Refs
+---
+
+* `C` - control. So `C-a` means to hit the control key and the a key.
+* `M` - alt/meta
+
+
+
+## terminal 
+
+* `C-p` = previous command
+* `C-u`= erase line before cursor
+* `C-l` = refresh screen
+* `C-M-t` = new terminal window
+
+## Vim
+
+* `sudo apt-get install vim`
+
+### `.vimrc`
+
+```bash
+:inoremap jk <Esc>
+set relativenumber
+```
+
