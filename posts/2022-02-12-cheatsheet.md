@@ -1,3 +1,8 @@
+---
+title: Common Command and Setup Cheatsheet
+date: 2022-02-12
+---
+
 # Common Command and Setup Cheatsheet
 
 ## terminal shortcuts
