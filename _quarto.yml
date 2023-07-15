@@ -13,7 +13,9 @@ website:
         href: https://twitter.com/psistolar
 format:
   html:
-    theme: cosmo
+    theme: 
+      dark: darkly
+      light: cosmo
     css: styles.css
 
 
