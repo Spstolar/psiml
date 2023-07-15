@@ -4,6 +4,7 @@
 
 * ctrl + P = previous command
 * ctrl + u = erase line before cursor
+* ctrl + l = refresh screen
 
 ## general linux shortcuts
 
