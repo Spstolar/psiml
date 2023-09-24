@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-09-24">
+
+<title>ψML - Graph My Code 2: Visualizing Function Dependencies in Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ψML</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../header/refs.html">Refs</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/spstolar"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Graph My Code 2: Visualizing Function Dependencies in Python</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 24, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Writing code that visualizes code.</p>
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<p>In <a href="Graph_My_Code_1">the previous installment</a>, we explored <code>ast</code> and gave high-level details about how to use this to generate a graph description of a Python script. Here we present a full implementation of this process: <a href="https://github.com/Spstolar/pycodecrawler">pygraphcrawler</a>.</p>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>Before we get into how it works, let’s see it in action. To parse code in a directory and create a Mermaid description:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> code_extraction <span class="im">import</span> extract_code_information</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> viz_code <span class="im">import</span> create_graph_description</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># m_info will house the code data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>m_info <span class="op">=</span> extract_code_information(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    directories<span class="op">=</span>[<span class="st">"example"</span>, <span class="st">"example2"</span>],  <span class="co"># each directory will be searched</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    other_python_filenames<span class="op">=</span>[<span class="st">"test.py"</span>]  <span class="co"># or specify particular files</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m_info.keys())  <span class="co"># to show us which modules we parsed</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>module_to_inspect <span class="op">=</span> <span class="st">"abyss"</span>  <span class="co"># select one of the module names</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># this is a markdown description of the select module</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>mermaid_graph_desc <span class="op">=</span> create_graph_description(m_info[module_to_inspect])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="multiple-calls-into-submodules-of-import" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-calls-into-submodules-of-import">Multiple calls into submodules of import</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeroes(<span class="dv">5</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mul():</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> np.array([[<span class="dv">4</span>, <span class="dv">1</span>],</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">2</span>, <span class="dv">2</span>]])</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.matmul(a, b)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eigs_of_product():</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> np.array([[<span class="dv">4</span>, <span class="dv">1</span>],</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">2</span>, <span class="dv">2</span>]])</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    product <span class="op">=</span> np.matmul(a, b)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    eigs <span class="op">=</span> np.linalg.eigs(product)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    np.linalg.debug.depth.error_print(eigs)  <span class="co"># this is a fake call for testing</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> eigs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-1">graph LR;
+    mul[mul] --&gt;|2| np.array[np.array];
+    mul[mul] --&gt;|2| np.array[np.array];
+    mul[mul] --&gt; np.matmul[np.matmul];
+    eigs_of_product[eigs_of_product] --&gt;|2| np.array[np.array];
+    eigs_of_product[eigs_of_product] --&gt;|2| np.array[np.array];
+    eigs_of_product[eigs_of_product] --&gt; np.matmul[np.matmul];
+    eigs_of_product[eigs_of_product] --&gt; np.linalg.eigs[np.linalg.eigs];
+    eigs_of_product[eigs_of_product] --&gt; np.linalg.debug.dept[np.linalg.debug.depth.error_print];
+    main[main] --&gt; np.zeroes[np.zeroes];
+
+subgraph np
+    np.linalg.debug.dept
+    np.array
+    np.linalg.eigs
+    np.matmul
+    np.zeroes
+end
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ul>
+<li>external module calls are grouped</li>
+<li>repeated calls to a function are denoted with edge labels</li>
+</ul>
+</section>
+<section id="calls-into-different-modules" class="level3">
+<h3 class="anchored" data-anchor-id="calls-into-different-modules">Calls into different modules</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pop_size <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>low <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_draw():</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.random.randint(low, high, pop_size)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_random_sample_mean():</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    pop <span class="op">=</span> [random_draw() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(pop)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>IMPORTANT_PATTERN <span class="op">=</span> <span class="vs">r"\d\d\s\w*\s"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find(text):</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> re.findall(IMPORTANT_PATTERN, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-2">graph LR;
+    random_draw[random_draw] --&gt; np.random.randint[np.random.randint];
+    get_random_sample_me[get_random_sample_mean] --&gt; random_draw[random_draw];
+    get_random_sample_me[get_random_sample_mean] --&gt; np.mean[np.mean];
+    py.find[find] --&gt; re.findall[re.findall];
+
+subgraph np
+    np.mean
+    np.random.randint
+end
+subgraph re
+    re.findall
+end
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ul>
+<li>at a glance we can see connections and distinct domains of defined functions
+<ul>
+<li><code>random_draw</code> is a helper</li>
+<li><code>find</code> has nothing to do with <code>get_random_sample_mean</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="handling-classes" class="level3">
+<h3 class="anchored" data-anchor-id="handling-classes">Handling Classes</h3>
+<p>We have functions and classes that call other classes to use their functionality. We keep track of these dependencies.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>things <span class="op">=</span> []</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check():</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    things.append(<span class="dv">0</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    np.zeros(<span class="dv">5</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Dog:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.friend <span class="op">=</span> Catdog()</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.shared_total <span class="op">=</span> <span class="va">self</span>.friend.run()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        test <span class="op">=</span> Catdog()</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        test.run()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Catdog:</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, how):</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.how <span class="op">=</span> how</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> run(<span class="va">self</span>):</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        test <span class="op">=</span> np.zeros(<span class="dv">3</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        total <span class="op">=</span>  test.<span class="bu">sum</span>()</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> total</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Catdog(<span class="dv">3</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> c.run()</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_catdog_run():</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> Catdog(<span class="dv">3</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> c.run()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-3">graph LR;
+    check[check] --&gt; np.zeros[np.zeros];
+    create_catdog_run[create_catdog_run] --&gt; Catdog.__init__[Catdog.__init__];
+    create_catdog_run[create_catdog_run] --&gt; Catdog.run[Catdog.run];
+    Dog.__init__[Dog.__init__] --&gt;|2| Catdog.__init__[Catdog.__init__];
+    Dog.__init__[Dog.__init__] --&gt;|2| Catdog.run[Catdog.run];
+    Dog.__init__[Dog.__init__] --&gt;|2| Catdog.__init__[Catdog.__init__];
+    Dog.__init__[Dog.__init__] --&gt;|2| Catdog.run[Catdog.run];
+    Catdog.run[Catdog.run] --&gt; np.zeros[np.zeros];
+    main[main] --&gt; Catdog.__init__[Catdog.__init__];
+    main[main] --&gt; Catdog.run[Catdog.run];
+subgraph Dog
+    Dog.__init__
+end
+subgraph Catdog
+    Catdog.__init__
+    Catdog.run
+end
+subgraph np
+    np.zeros
+end
+</pre>
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ul>
+<li><code>Dog</code> is entirely depending on <code>Catdog</code>. Good to know if you’re thinking about changing <code>Catdog</code>.</li>
+<li><code>numpy</code> is an important dependency, everything is connected to it</li>
+</ul>
+</section>
+<section id="dogfooding" class="level3">
+<h3 class="anchored" data-anchor-id="dogfooding">Dogfooding</h3>
+<p>Now let’s apply the crawler to itself!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-4">graph LR;
+    walk_script[walk_script] --&gt; ast.parse[ast.parse];
+    walk_script[walk_script] --&gt; worker_script.read[worker_script.read];
+    walk_script[walk_script] --&gt; ast.walk[ast.walk];
+    get_submodule_desc[get_submodule_desc] --&gt; get_submodule_desc[get_submodule_desc];
+    process_from_import_[process_from_import_node] --&gt; ImportNode.__init__[ImportNode.__init__];
+    process_import_node[process_import_node] --&gt; ImportNode.__init__[ImportNode.__init__];
+    process_call_node[process_call_node] --&gt; print_call_node_info[print_call_node_info];
+    process_call_node[process_call_node] --&gt; get_submodule_desc[get_submodule_desc];
+    process_call_node[process_call_node] --&gt; CallNode.__init__[CallNode.__init__];
+    process_call_node[process_call_node] --&gt; CallNode.__init__[CallNode.__init__];
+    process_func_def_nod[process_func_def_node] --&gt; FuncDefNode.__init__[FuncDefNode.__init__];
+    process_class_node[process_class_node] --&gt; ClassNode.__init__[ClassNode.__init__];
+    process_class_func_n[process_class_func_node] --&gt; FuncDefNode.__init__[FuncDefNode.__init__];
+    add_import[add_import] --&gt; process_import_node[process_import_node];
+    add_import[add_import] --&gt; process_from_import_[process_from_import_node];
+    add_call_or_import[add_call_or_import] --&gt; process_import_node[process_import_node];
+    add_call_or_import[add_call_or_import] --&gt; process_from_import_[process_from_import_node];
+    add_call_or_import[add_call_or_import] --&gt; process_call_node[process_call_node];
+    walk_node_children[walk_node_children] --&gt; ast.walk[ast.walk];
+    process_class_functi[process_class_function_def] --&gt; process_func_def_nod[process_func_def_node];
+    process_class_functi[process_class_function_def] --&gt; process_func_def_chi[process_func_def_children];
+    process_class_method[process_class_methods] --&gt; process_class_functi[process_class_function_def];
+    get_instantiated_obj[get_instantiated_object_name] --&gt; sibling_list.index[sibling_list.index];
+    update_call_data_for[update_call_data_for_object_info] --&gt; get_instantiated_obj[get_instantiated_object_name];
+    process_func_def_chi[process_func_def_children] --&gt; walk_node_children[walk_node_children];
+    process_func_def_chi[process_func_def_children] --&gt; process_func_def_nod[process_func_def_node];
+    process_func_def_chi[process_func_def_children] --&gt; add_import[add_import];
+    process_func_def_chi[process_func_def_children] --&gt; process_call_node[process_call_node];
+    process_func_def_chi[process_func_def_children] --&gt; update_call_data_for[update_call_data_for_object_info];
+    process_script_work[process_script_work] --&gt; walk_node_children[walk_node_children];
+    process_script_work[process_script_work] --&gt; process_call_node[process_call_node];
+    process_script_work[process_script_work] --&gt; update_call_data_for[update_call_data_for_object_info];
+    parse_module_node[parse_module_node] --&gt; process_class_method[process_class_methods];
+    parse_module_node[parse_module_node] --&gt; process_class_node[process_class_node];
+    parse_module_node[parse_module_node] --&gt; process_func_def_nod[process_func_def_node];
+    parse_module_node[parse_module_node] --&gt; process_func_def_chi[process_func_def_children];
+    parse_module_node[parse_module_node] --&gt; add_import[add_import];
+    parse_module_node[parse_module_node] --&gt; process_script_work[process_script_work];
+    manage_module_import[manage_module_imports] --&gt; collections.defaultd[collections.defaultdict];
+    manage_module_import[manage_module_imports] --&gt; ImportNode.__init__[ImportNode.__init__];
+    get_walked_scripted_[get_walked_scripted_from_filename] --&gt; pathlib.Path[pathlib.Path];
+    get_walked_scripted_[get_walked_scripted_from_filename] --&gt; walk_script[walk_script];
+    get_top_level_node_f[get_top_level_node_from_filename] --&gt; ast.parse[ast.parse];
+    get_top_level_node_f[get_top_level_node_from_filename] --&gt; script_contents.read[script_contents.read];
+    extract_node_structu[extract_node_structure_from_script] --&gt; pathlib.Path[pathlib.Path];
+    extract_node_structu[extract_node_structure_from_script] --&gt; get_top_level_node_f[get_top_level_node_from_filename];
+    extract_node_structu[extract_node_structure_from_script] --&gt; parse_module_node[parse_module_node];
+    extract_node_structu[extract_node_structure_from_script] --&gt; manage_module_import[manage_module_imports];
+subgraph ImportNode
+
+end
+subgraph CallNode
+
+end
+subgraph FuncDefNode
+
+end
+subgraph ClassNode
+
+end
+subgraph pathlib
+    pathlib.Path
+end
+subgraph collections
+    collections.defaultd
+end
+subgraph ast
+    ast.parse
+    ast.walk
+end
+</pre>
+<div id="mermaid-tooltip-4" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ul>
+<li>you can nicely see the recursive nature of the process where <code>get_submodule_desc</code> is pointing to itself</li>
+<li>the class subgraphs for our data containers like <code>ImportNode</code> and <code>ClassNode</code> are empty. This is because we’re using <code>@dataclass</code> for simplicity. A potential improvement would be parsing them knowing that they have <code>__init__</code> methods coming from the decorator</li>
+<li>we can also see some dead code where <code>process_class_func_node</code> has nothing depending on it and we know we aren’t calling it</li>
+</ul>
+</section>
+<section id="collections" class="level3">
+<h3 class="anchored" data-anchor-id="collections">Collections</h3>
+<p>Finally, let’s look at one of the standard library modules. Given we use <code>collections</code> when building this crawler, that seems like a fun choice.</p>
+<p>On my machine (I’m using WSL 2), the library is stored at <code>/usr/lib/python3.8/collections</code>. So, I extract the module by pointing to that directory, which has two files <code>__init__</code> and <code>abc</code>. The latter is pretty sparse, because it’s just performing imports.</p>
+<p>If we were to get the entire graph for collections it would actually be pretty horrendous. This is because it has many classes in it and each class performs a ton of calls. To give you the power to select a subgraph of the code information there are options for <code>create_graph_description</code>:</p>
+<ul>
+<li><code>wanted_classes</code> - only display information about the classes whose names are in this list</li>
+<li><code>include_body_commands</code> - include the calls that are made in the body of the script</li>
+<li><code>include_function_defs</code> - include details about the module’s non-class function definitions</li>
+</ul>
+<p>First, we extract the information to create the module info:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>collections_location <span class="op">=</span> <span class="st">"/usr/lib/python3.8/collections"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>m_info <span class="op">=</span> extract_code_information(directories<span class="op">=</span>[collections_location])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then with <code>[c.name for c in m_info["__init__"]["class_list"]]</code> we can see these are the classes in <code>__init__.py</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>[<span class="st">'_OrderedDictKeysView'</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'_OrderedDictItemsView'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'_OrderedDictValuesView'</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'_Link'</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="st">'OrderedDict'</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> <span class="st">'Counter'</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a> <span class="st">'ChainMap'</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a> <span class="st">'UserDict'</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a> <span class="st">'UserList'</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a> <span class="st">'UserString'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If we only want information about <code>OrderedDict</code> then we use <code>create_graph_description</code> with these arguments to mute body calls and other function definitions:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>create_graph_description(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    m_info[<span class="st">"__init__"</span>],</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    wanted_classes<span class="op">=</span>[<span class="st">"OrderedDict"</span>],</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    include_body_commands<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    include_function_defs<span class="op">=</span><span class="va">False</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-5">graph LR;
+    OrderedDict.__init__[OrderedDict.__init__] --&gt; _Link.__init__[_Link.__init__];
+    OrderedDict.__init__[OrderedDict.__init__] --&gt; _proxy[_proxy];
+    OrderedDict.__init__[OrderedDict.__init__] --&gt; self.__update[self.__update];
+    OrderedDict.__setite[OrderedDict.__setitem__] --&gt; Link[Link];
+    OrderedDict.__setite[OrderedDict.__setitem__] --&gt; proxy[proxy];
+    OrderedDict.__setite[OrderedDict.__setitem__] --&gt; dict_setitem[dict_setitem];
+    OrderedDict.__delite[OrderedDict.__delitem__] --&gt; dict_delitem[dict_delitem];
+    OrderedDict.__delite[OrderedDict.__delitem__] --&gt; self.__map.pop[self.__map.pop];
+    OrderedDict.clear[OrderedDict.clear] --&gt; self.__map.clear[self.__map.clear];
+    OrderedDict.clear[OrderedDict.clear] --&gt; dict.clear[dict.clear];
+    OrderedDict.popitem[OrderedDict.popitem] --&gt; dict.pop[dict.pop];
+    OrderedDict.__sizeof[OrderedDict.__sizeof__] --&gt; sizeof[sizeof];
+    OrderedDict.__sizeof[OrderedDict.__sizeof__] --&gt; sizeof[sizeof];
+    OrderedDict.__sizeof[OrderedDict.__sizeof__] --&gt; sizeof[sizeof];
+    OrderedDict.__sizeof[OrderedDict.__sizeof__] --&gt; sizeof[sizeof];
+    OrderedDict.keys[OrderedDict.keys] --&gt; _OrderedDictKeysView[_OrderedDictKeysView.__init__];
+    OrderedDict.items[OrderedDict.items] --&gt; _OrderedDictItemsVie[_OrderedDictItemsView.__init__];
+    OrderedDict.values[OrderedDict.values] --&gt; _OrderedDictValuesVi[_OrderedDictValuesView.__init__];
+    OrderedDict.__reduce[OrderedDict.__reduce__] --&gt; copy[copy];
+    OrderedDict.__reduce[OrderedDict.__reduce__] --&gt; vars[vars];
+    OrderedDict.__reduce[OrderedDict.__reduce__] --&gt; vars[vars];
+    OrderedDict.__reduce[OrderedDict.__reduce__] --&gt; OrderedDict.__init__[OrderedDict.__init__];
+    OrderedDict.__reduce[OrderedDict.__reduce__] --&gt; inst_dict.pop[inst_dict.pop];
+    OrderedDict.copy[OrderedDict.copy] --&gt; self.__class__[self.__class__];
+    OrderedDict.__eq__[OrderedDict.__eq__] --&gt; dict.__eq__[dict.__eq__];
+    OrderedDict.__eq__[OrderedDict.__eq__] --&gt; dict.__eq__[dict.__eq__];
+subgraph OrderedDict
+    OrderedDict.__init__
+    OrderedDict.__setite
+    OrderedDict.__delite
+    OrderedDict.__iter__
+    OrderedDict.__revers
+    OrderedDict.clear
+    OrderedDict.popitem
+    OrderedDict.move_to_
+    OrderedDict.__sizeof
+    OrderedDict.keys
+    OrderedDict.items
+    OrderedDict.values
+    OrderedDict.pop
+    OrderedDict.setdefau
+    OrderedDict.__repr__
+    OrderedDict.__reduce
+    OrderedDict.copy
+    OrderedDict.fromkeys
+    OrderedDict.__eq__
+end
+subgraph _collections_abc
+    _collections_abc.Mut
+end
+subgraph _sys
+    _sys._getframe
+    _sys.intern
+end
+subgraph warnings
+    warnings.warn
+end
+</pre>
+<div id="mermaid-tooltip-5" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ul>
+<li>despite being a more complex example, the call depth is actually pretty shallow</li>
+<li>many operations are defined in terms of operations of simpler data structures, in this case operations on regular dictionaries</li>
+<li>we have some external module data here, from <code>warnings</code>, <code>_sys</code>, and <code>_collections_abc</code>. These aren’t used by <code>OrderedDict</code>, but are handled differently, so you would have to do a little more work to mute them.</li>
+</ul>
+<p>Let’s look at another class (<code>Counter</code>) but show any non-class functions and work done in the script. We do this using the fact that the defaults are <code>True</code> for showing that data:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>create_graph_description(m_info[<span class="st">"__init__"</span>], wanted_classes<span class="op">=</span>[<span class="st">"Counter"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-6">graph LR;
+    __getattr__[__getattr__] --&gt; getattr[getattr];
+    __getattr__[__getattr__] --&gt; warnings.warn[warnings.warn];
+    __getattr__[__getattr__] --&gt; globals[globals];
+    __getattr__[__getattr__] --&gt; AttributeError[AttributeError];
+    namedtuple[namedtuple] --&gt; field_names.replace[field_names.replace];
+    namedtuple[namedtuple] --&gt; _sys.intern[_sys.intern];
+    namedtuple[namedtuple] --&gt; seen.add[seen.add];
+    namedtuple[namedtuple] --&gt; _iskeyword[_iskeyword];
+    namedtuple[namedtuple] --&gt; name.startswith[name.startswith];
+    namedtuple[namedtuple] --&gt; name.isidentifier[name.isidentifier];
+    namedtuple[namedtuple] --&gt; _iskeyword[_iskeyword];
+    namedtuple[namedtuple] --&gt; name.isidentifier[name.isidentifier];
+    namedtuple[namedtuple] --&gt; seen.add[seen.add];
+    namedtuple[namedtuple] --&gt; name.startswith[name.startswith];
+    namedtuple[namedtuple] --&gt; exec[exec];
+    namedtuple[namedtuple] --&gt; tuple_new[tuple_new];
+    namedtuple[namedtuple] --&gt; _len[_len];
+    namedtuple[namedtuple] --&gt; self._make[self._make];
+    namedtuple[namedtuple] --&gt; _map[_map];
+    namedtuple[namedtuple] --&gt; _dict[_dict];
+    namedtuple[namedtuple] --&gt; _zip[_zip];
+    namedtuple[namedtuple] --&gt; _tuple[_tuple];
+    namedtuple[namedtuple] --&gt; _sys.intern[_sys.intern];
+    namedtuple[namedtuple] --&gt; _tuplegetter[_tuplegetter];
+    namedtuple[namedtuple] --&gt; f_globals.get[f_globals.get];
+    namedtuple[namedtuple] --&gt; _sys._getframe[_sys._getframe];
+    _count_elements[_count_elements] --&gt; mapping_get[mapping_get];
+    Counter.__init__[Counter.__init__] --&gt; __init__[__init__];
+    Counter.__init__[Counter.__init__] --&gt; super[super];
+    Counter.__init__[Counter.__init__] --&gt; self.update[self.update];
+    Counter.most_common[Counter.most_common] --&gt; sorted[sorted];
+    Counter.most_common[Counter.most_common] --&gt; _itemgetter[_itemgetter];
+    Counter.most_common[Counter.most_common] --&gt; _heapq.nlargest[_heapq.nlargest];
+    Counter.most_common[Counter.most_common] --&gt; _itemgetter[_itemgetter];
+    Counter.elements[Counter.elements] --&gt; _chain.from_iterable[_chain.from_iterable];
+    Counter.elements[Counter.elements] --&gt; _starmap[_starmap];
+    Counter.fromkeys[Counter.fromkeys] --&gt; NotImplementedError[NotImplementedError];
+    Counter.update[Counter.update] --&gt; _count_elements[_count_elements];
+    Counter.update[Counter.update] --&gt; update[update];
+    Counter.update[Counter.update] --&gt; self_get[self_get];
+    Counter.update[Counter.update] --&gt; super[super];
+    Counter.update[Counter.update] --&gt; self.update[self.update];
+    Counter.subtract[Counter.subtract] --&gt; self_get[self_get];
+    Counter.subtract[Counter.subtract] --&gt; self_get[self_get];
+    Counter.subtract[Counter.subtract] --&gt; self.subtract[self.subtract];
+    Counter.copy[Counter.copy] --&gt; self.__class__[self.__class__];
+    Counter.__delitem__[Counter.__delitem__] --&gt; __delitem__[__delitem__];
+    Counter.__delitem__[Counter.__delitem__] --&gt; super[super];
+    Counter.__repr__[Counter.__repr__] --&gt; format[format];
+    Counter.__repr__[Counter.__repr__] --&gt; self.most_common[self.most_common];
+    Counter.__add__[Counter.__add__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__sub__[Counter.__sub__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__or__[Counter.__or__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__and__[Counter.__and__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__pos__[Counter.__pos__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__neg__[Counter.__neg__] --&gt; Counter.__init__[Counter.__init__];
+    Counter.__iadd__[Counter.__iadd__] --&gt; self._keep_positive[self._keep_positive];
+    Counter.__isub__[Counter.__isub__] --&gt; self._keep_positive[self._keep_positive];
+    Counter.__ior__[Counter.__ior__] --&gt; self._keep_positive[self._keep_positive];
+    Counter.__iand__[Counter.__iand__] --&gt; self._keep_positive[self._keep_positive];
+    main[main] --&gt; _collections_abc.Mut[_collections_abc.MutableSequence.register];
+    main[main] --&gt; property[property];
+    main[main] --&gt; _itemgetter[_itemgetter];
+    main[main] --&gt; getattr[getattr];
+    main[main] --&gt; warnings.warn[warnings.warn];
+    main[main] --&gt; globals[globals];
+    main[main] --&gt; AttributeError[AttributeError];
+    main[main] --&gt; field_names.replace[field_names.replace];
+    main[main] --&gt; _sys.intern[_sys.intern];
+    main[main] --&gt; seen.add[seen.add];
+    main[main] --&gt; _iskeyword[_iskeyword];
+    main[main] --&gt; name.startswith[name.startswith];
+    main[main] --&gt; name.isidentifier[name.isidentifier];
+    main[main] --&gt; _iskeyword[_iskeyword];
+    main[main] --&gt; name.isidentifier[name.isidentifier];
+    main[main] --&gt; seen.add[seen.add];
+    main[main] --&gt; name.startswith[name.startswith];
+    main[main] --&gt; exec[exec];
+    main[main] --&gt; tuple_new[tuple_new];
+    main[main] --&gt; _len[_len];
+    main[main] --&gt; self._make[self._make];
+    main[main] --&gt; _map[_map];
+    main[main] --&gt; _dict[_dict];
+    main[main] --&gt; _zip[_zip];
+    main[main] --&gt; _tuple[_tuple];
+    main[main] --&gt; _sys.intern[_sys.intern];
+    main[main] --&gt; _tuplegetter[_tuplegetter];
+    main[main] --&gt; f_globals.get[f_globals.get];
+    main[main] --&gt; _sys._getframe[_sys._getframe];
+    main[main] --&gt; mapping_get[mapping_get];
+    main[main] --&gt; getattr[getattr];
+    main[main] --&gt; warnings.warn[warnings.warn];
+    main[main] --&gt; globals[globals];
+    main[main] --&gt; AttributeError[AttributeError];
+    main[main] --&gt; field_names.replace[field_names.replace];
+    main[main] --&gt; _sys.intern[_sys.intern];
+    main[main] --&gt; seen.add[seen.add];
+    main[main] --&gt; _iskeyword[_iskeyword];
+    main[main] --&gt; name.startswith[name.startswith];
+    main[main] --&gt; name.isidentifier[name.isidentifier];
+    main[main] --&gt; _iskeyword[_iskeyword];
+    main[main] --&gt; name.isidentifier[name.isidentifier];
+    main[main] --&gt; seen.add[seen.add];
+    main[main] --&gt; name.startswith[name.startswith];
+    main[main] --&gt; exec[exec];
+    main[main] --&gt; tuple_new[tuple_new];
+    main[main] --&gt; _len[_len];
+    main[main] --&gt; self._make[self._make];
+    main[main] --&gt; _map[_map];
+    main[main] --&gt; _dict[_dict];
+    main[main] --&gt; _zip[_zip];
+    main[main] --&gt; _tuple[_tuple];
+    main[main] --&gt; _sys.intern[_sys.intern];
+    main[main] --&gt; _tuplegetter[_tuplegetter];
+    main[main] --&gt; f_globals.get[f_globals.get];
+    main[main] --&gt; _sys._getframe[_sys._getframe];
+    main[main] --&gt; mapping_get[mapping_get];
+subgraph Counter
+    Counter.__init__
+    Counter.__missing__
+    Counter.most_common
+    Counter.elements
+    Counter.fromkeys
+    Counter.update
+    Counter.subtract
+    Counter.copy
+    Counter.__reduce__
+    Counter.__delitem__
+    Counter.__repr__
+    Counter.__add__
+    Counter.__sub__
+    Counter.__or__
+    Counter.__and__
+    Counter.__pos__
+    Counter.__neg__
+    Counter._keep_positi
+    Counter.__iadd__
+    Counter.__isub__
+    Counter.__ior__
+    Counter.__iand__
+end
+subgraph _collections_abc
+    _collections_abc.Mut
+end
+subgraph _sys
+    _sys._getframe
+    _sys.intern
+end
+subgraph warnings
+    warnings.warn
+end
+</pre>
+<div id="mermaid-tooltip-6" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<p>We can see that there is a lot going on, but also a lot of common boiler plate used. When you are inspecting more complicated module likes this, you’ll want to use the options provided to break it into more readable chunks.</p>
+</section>
+</section>
+<section id="pygraphcrawler---code-graph-creation" class="level2">
+<h2 class="anchored" data-anchor-id="pygraphcrawler---code-graph-creation"><code>pygraphcrawler</code> - Code Graph Creation</h2>
+<p>The <a href="https://github.com/Spstolar/pycodecrawler">final repo is here</a>. The main parts are</p>
+<ul>
+<li><code>code_extraction.py</code> - entry point script to coordinate which files to parse and run the parser</li>
+<li><code>dep_parser.py</code> - generate module info by parsing a module using <code>ast</code></li>
+<li><code>code_graph.py</code> - convert module info into graph edge data</li>
+<li><code>viz_code.py</code> - use edge data and module info to create Mermaid graph descriptions.</li>
+</ul>
+<section id="crawl-code" class="level3">
+<h3 class="anchored" data-anchor-id="crawl-code">Crawl Code</h3>
+<p>We start by parsing the full script and look at the top-level module node. This lets us know the name of the script and gives us its immediate children in the <code>ast</code> graph.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>module_node <span class="op">=</span> get_top_level_node_from_filename(path)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>import_list, call_list, func_defs, class_list <span class="op">=</span> parse_module_node(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    module_node, current_module_name, verbose<span class="op">=</span>verbose</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This work is done in <code>parse_module_node</code>, where we go through each node in the body of the <code>module_node</code> and depending on the node type, process it and its child <code>ast</code> nodes. This allows us to distinguish calls to functions that are made inside function definitions from calls that are made in the general script, as well as annotate those dependencies. By walking these parsed elements, we can extract the data stored in an <code>ast</code> node and convert it to more convenient classes. For instance rather than working with <code>ast.Call</code> objects we use a custom <code>CallNode</code> object:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CallNode:</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    module: <span class="bu">str</span>  <span class="co"># what module does the called function belong to</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span>  <span class="co"># function name</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    call_lineno: <span class="bu">int</span>  <span class="co"># where was the call</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    called_by: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>  <span class="co"># what was the caller</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, provided an <code>ast.Call</code> node, we parse it for that data above like this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>func_data <span class="op">=</span> node.func  <span class="co"># func is an attribute of an ast.Call object</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># func_data can either be an Attribute or a Name, which require</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># different ways to access their properties</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">isinstance</span>(func_data, ast.Attribute):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    function_name <span class="op">=</span> func_data.attr</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    value <span class="op">=</span> func_data.value</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># handle submodule calls like np.linalg.norm</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    submodule_desc <span class="op">=</span> get_submodule_desc(value)  </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    submodule_desc.reverse()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    call_node <span class="op">=</span> CallNode(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        module<span class="op">=</span>submodule_desc, name<span class="op">=</span>function_name, call_lineno<span class="op">=</span>node.lineno</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> <span class="bu">isinstance</span>(func_data, ast.Name):</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    call_node <span class="op">=</span> CallNode(</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>func_data.<span class="bu">id</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        module<span class="op">=</span>[],  <span class="co"># the call node did not have this detail, requiring separate handling</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        call_lineno<span class="op">=</span>node.lineno,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"error"</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(node)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By parsing it, we have an easier way to reference the call and its properties. We have similar classes and parsers for the other node types.</p>
+<p>Once we have the module data we collect it into a dictionary specifying:</p>
+<ul>
+<li><code>import_list</code> - which modules were imported and where did we call them</li>
+<li><code>call_list</code> - all function calls</li>
+<li><code>func_defs</code> - function definitions</li>
+<li><code>class_list</code> - class data including methods</li>
+</ul>
+<p>From here, we can take this parsed module data and convert it to edges. This is where we can prune some of the lower level function calls (like <code>print()</code>) that we are not interested in visualizing. We also can compress multiple calls from one function to another into a single edge with a weight tracking the call count (as in the first example).</p>
+<p>Finally, we take the edges and module data and create the Mermaid graph description:</p>
+<ul>
+<li>edge data allows us to specify the graph edges and carefully check naming conventions</li>
+<li>module data lets us create subgraphs to group calls into the same external module. Grouping calls in this way makes dependencies a lot easier to understand.</li>
+<li>module data also enables grouping class methods</li>
+</ul>
+</section>
+</section>
+<section id="uses" class="level2">
+<h2 class="anchored" data-anchor-id="uses">Uses</h2>
+<section id="code-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="code-analysis">Code Analysis</h3>
+<p>As we saw in the examples, the code graph can tell us some basic things at a glance:</p>
+<ul>
+<li>what are the top level functions - look at the nodes farthest to the left</li>
+<li>what external libraries do we have the most dependencies on - look at call counts into the module subgraphs and terminal nodes with many ancestors</li>
+<li>do we have dead code - is there a component of the graph that contains a top level function we no longer use?</li>
+</ul>
+</section>
+<section id="documentation" class="level3">
+<h3 class="anchored" data-anchor-id="documentation">Documentation</h3>
+<p>For smaller modules, this is also a form of documentation. You can get a pretty good idea of what a function is doing by looking at its name and what it calls. For larger modules, this still applies but something with many definitions can become cluttered and you may want to break it into pieces.</p>
+</section>
+</section>
+<section id="extensions" class="level2">
+<h2 class="anchored" data-anchor-id="extensions">Extensions</h2>
+<section id="code-similarity" class="level3">
+<h3 class="anchored" data-anchor-id="code-similarity">Code Similarity</h3>
+<blockquote class="blockquote">
+<p>Given two code graphs, how can we measure similarity?</p>
+</blockquote>
+<ul>
+<li>use basic graph similarity measures from a graph object constructed from the edge data</li>
+<li>use the calls into external modules and see how much they overlap</li>
+<li>use the markdown graph as a compressed version of two modules and run text similarity methods, which can be difficult to run on the non-compressed original source</li>
+</ul>
+<p>By identifying when we have similar code structures, we can begin to develop better abstractions of code (as needed). Right now, this only generates the graph data, but this would be a possible extension of that data.</p>
+</section>
+<section id="code-generation" class="level3">
+<h3 class="anchored" data-anchor-id="code-generation">Code Generation</h3>
+<blockquote class="blockquote">
+<p>Using the basic building blocks of an answer to a small problem, can we randomly recreate it?</p>
+</blockquote>
+<p>This is more of a fringe use case, but you could use the inter-function dependency data to shrink the space of grammatical code expressions in order to randomly generate code. Not quite a copilot by any stretch, but could generate some interesting results.</p>
+</section>
+</section>
+<section id="lessons-learned" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-learned">Lessons Learned</h2>
+<section id="when-to-walk-when-to-run" class="level3">
+<h3 class="anchored" data-anchor-id="when-to-walk-when-to-run">When to Walk, When to Run</h3>
+<p>Initially, I was parsing code using the full list of nodes generated by <code>ast.walk()</code>. Unfortunately, this makes it difficult to connect calls to the function definitions they may reside in. In the walked list, you can get a function definition node followed by call nodes in the list, but it then requires more work to determine if those calls were in the function definition or outside of it just later in the walked tree. You could get around this with line number comparisons (I leave some deprecated functions in the repo for doing this), but I found it simpler to recursively use the node structure generated by <code>ast</code>.</p>
+<p>On the other hand, you sometimes do want to sweep through all the child nodes. When you manually walk the tree, you can end up with heavily nested structure to call. For instance, <code>f() + (2 * (g() + h()))</code> involves going through the expression and parsing binary operations and nested expressions just to get the data that you care about (the three functions that were called).</p>
+<p>When you crawl the node structure, selectively using <code>ast.walk</code> on some of the child nodes of the top level module node can avoid this. Get the highest level nodes – like classes and function definitions – and then allow <code>ast</code> to quickly walk all the children of those nodes so you can get all the data you care about and also tie it to those higher level nodes.</p>
+</section>
+<section id="keywords-and-meta-programming" class="level3">
+<h3 class="anchored" data-anchor-id="keywords-and-meta-programming">Keywords and Meta-programming</h3>
+<p>In my graph description generator, I’m careful to rename words like “map” and “find” when they are used outside of node labels. This is because these appear to be keywords of the process of generating the graph image from the markdown, so including them as regular names of nodes will cause the preview to error out on VSCode. There was also a special case for the word “end” appearing as part of a node name because this conflicts with using “end” to delineate subgraphs, but the fix is to capitalize part of “end”. This is why it is important to have input sanitation performed before compiling the final product.</p>
+<p>This is a general concern to keep in mind, when you’re creating descriptions of code you want to be careful about escaping problematic terms so that whatever system you are using does not confuse a command with a description. I found similar issues when printing out the Mermaid graphs in a notebook, sometimes causing the entire notebook to hit some invalid states. Hard to issue good guidance other than “be on the lookout.”</p>
+</section>
+<section id="low-level-calls" class="level3">
+<h3 class="anchored" data-anchor-id="low-level-calls">Low-level Calls</h3>
+<p>In common expressions like <code>some_list.append(item)</code> you are performing a function call. While it may be useful to see this in the final graph, I found that it cluttered the visualization. To get around this, I kept such things in the parsed data, but use explicit lists of common function names to exclude when creating the graph markdown. Along with some rules for how to handle parsing a call’s module, this removed a lot of noise.</p>
+<p>This is an opportunity for improvement though, because I’m using simple rules to determine when to skip over calls. Ideally using something to determine the type of object a function is attached to (are we running an operation on a dictionary or a list) would improve this.</p>
+</section>
+<section id="classes" class="level3">
+<h3 class="anchored" data-anchor-id="classes">Classes</h3>
+<p>Related to difficulty in detecting type information, when you have class definitions involved things begin to get tricky. In fact, I thought I was done with the project before I saw how large of a gap effectively processing classes was.</p>
+<p>Getting the function definition information out of class methods is straightforward, because things are nicely grouped in an <code>ast</code> node for the class. Less obvious is how to determine when you are making a call to an instantiated object of a class.</p>
+<p>My solution was a hack: when you have a call, check if the name overlaps with any of the names of classes in the module. If so, it’s likely creating an object, so jump up the walked syntax tree to the assignment and keep track of the name used for the assignment target (the <code>x</code> in <code>x = 1</code>). Then in that scope you know any calls involving that object name are calls to the class methods and you can track it appropriately.</p>
+<p>To do this “the right way” you would have to almost run your own version of the interpreter, as mentioned in the low-level calls lesson. This would definitely be an interesting problem to work on, but I’m satisfied omitting the ability to parse more elaborate Python code in this visualizer.</p>
+</section>
+</section>
+<section id="have-fun" class="level2">
+<h2 class="anchored" data-anchor-id="have-fun">Have Fun</h2>
+<p>Feel free to experiment with <a href="https://github.com/Spstolar/pycodecrawler/blob/main/code_graph.py">the code</a> and let me know if you find other use cases or if you’d like to contribute.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'alternate';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

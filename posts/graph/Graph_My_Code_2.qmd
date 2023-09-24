@@ -1,0 +1,688 @@
+---
+title: "Graph My Code 2: Visualizing Function Dependencies in Python"
+date: "2023-09-24"
+---
+
+Writing code that visualizes code.
+
+## Intro
+
+In [the previous installment](Graph_My_Code_1), we explored `ast` and gave high-level details about how to use this to generate a graph description of a Python script. Here we present a full implementation of this process: [pygraphcrawler](https://github.com/Spstolar/pycodecrawler).
+
+## Examples
+
+Before we get into how it works, let's see it in action. To parse code in a directory and create a Mermaid description:
+
+```python
+from code_extraction import extract_code_information
+from viz_code import create_graph_description
+
+# m_info will house the code data
+m_info = extract_code_information(
+    directories=["example", "example2"],  # each directory will be searched
+    other_python_filenames=["test.py"]  # or specify particular files
+)
+print(m_info.keys())  # to show us which modules we parsed
+module_to_inspect = "abyss"  # select one of the module names
+# this is a markdown description of the select module
+mermaid_graph_desc = create_graph_description(m_info[module_to_inspect])
+```
+
+### Multiple calls into submodules of import
+
+```python
+import numpy as np
+
+z = np.zeroes(5)
+
+def mul():
+    a = np.array([[1, 0],
+                  [0, 1]])
+    b = np.array([[4, 1],
+                  [2, 2]])
+    return np.matmul(a, b)
+
+def eigs_of_product():
+    a = np.array([[1, 0],
+                  [0, 1]])
+    b = np.array([[4, 1],
+                  [2, 2]])
+    product = np.matmul(a, b)
+    eigs = np.linalg.eigs(product)
+    np.linalg.debug.depth.error_print(eigs)  # this is a fake call for testing
+    return eigs
+```
+
+
+```{mermaid}
+graph LR;
+	mul[mul] -->|2| np.array[np.array];
+	mul[mul] -->|2| np.array[np.array];
+	mul[mul] --> np.matmul[np.matmul];
+	eigs_of_product[eigs_of_product] -->|2| np.array[np.array];
+	eigs_of_product[eigs_of_product] -->|2| np.array[np.array];
+	eigs_of_product[eigs_of_product] --> np.matmul[np.matmul];
+	eigs_of_product[eigs_of_product] --> np.linalg.eigs[np.linalg.eigs];
+	eigs_of_product[eigs_of_product] --> np.linalg.debug.dept[np.linalg.debug.depth.error_print];
+	main[main] --> np.zeroes[np.zeroes];
+
+subgraph np
+	np.linalg.debug.dept
+	np.array
+	np.linalg.eigs
+	np.matmul
+	np.zeroes
+end
+```
+
+* external module calls are grouped
+* repeated calls to a function are denoted with edge labels
+
+
+### Calls into different modules
+
+```python
+import numpy as np
+import re
+
+pop_size = 10
+low = 0
+high = 100
+
+def random_draw():
+    return np.random.randint(low, high, pop_size)
+
+def get_random_sample_mean():
+    pop = [random_draw() for _ in range(10)]
+    return np.mean(pop)
+
+IMPORTANT_PATTERN = r"\d\d\s\w*\s"
+def find(text):
+    return re.findall(IMPORTANT_PATTERN, text)
+```
+
+```{mermaid}
+graph LR;
+	random_draw[random_draw] --> np.random.randint[np.random.randint];
+	get_random_sample_me[get_random_sample_mean] --> random_draw[random_draw];
+	get_random_sample_me[get_random_sample_mean] --> np.mean[np.mean];
+	py.find[find] --> re.findall[re.findall];
+
+subgraph np
+	np.mean
+	np.random.randint
+end
+subgraph re
+	re.findall
+end
+```
+
+* at a glance we can see connections and distinct domains of defined functions
+    * `random_draw` is a helper
+    * `find` has nothing to do with `get_random_sample_mean`
+
+
+### Handling Classes
+
+We have functions and classes that call other classes to use their functionality. We keep track of these dependencies.
+
+```python
+import numpy as np
+things = []
+
+def check():
+    things.append(0)
+    np.zeros(5)
+
+class Dog:
+    def __init__(self):
+        self.friend = Catdog()
+        self.shared_total = self.friend.run()
+        test = Catdog()
+        test.run()
+
+class Catdog:
+    def __init__(self, how):
+        self.how = how
+
+    def run(self):
+        test = np.zeros(3)
+        total =  test.sum()
+        return total
+
+c = Catdog(3)
+t = c.run()
+
+def create_catdog_run():
+    c = Catdog(3)
+    t = c.run()
+    print(t)
+```
+
+```{mermaid}
+graph LR;
+	check[check] --> np.zeros[np.zeros];
+	create_catdog_run[create_catdog_run] --> Catdog.__init__[Catdog.__init__];
+	create_catdog_run[create_catdog_run] --> Catdog.run[Catdog.run];
+	Dog.__init__[Dog.__init__] -->|2| Catdog.__init__[Catdog.__init__];
+	Dog.__init__[Dog.__init__] -->|2| Catdog.run[Catdog.run];
+	Dog.__init__[Dog.__init__] -->|2| Catdog.__init__[Catdog.__init__];
+	Dog.__init__[Dog.__init__] -->|2| Catdog.run[Catdog.run];
+	Catdog.run[Catdog.run] --> np.zeros[np.zeros];
+	main[main] --> Catdog.__init__[Catdog.__init__];
+	main[main] --> Catdog.run[Catdog.run];
+subgraph Dog
+	Dog.__init__
+end
+subgraph Catdog
+	Catdog.__init__
+	Catdog.run
+end
+subgraph np
+	np.zeros
+end
+```
+
+* `Dog` is entirely depending on `Catdog`. Good to know if you're thinking about changing `Catdog`.
+* `numpy` is an important dependency, everything is connected to it
+
+### Dogfooding
+
+Now let's apply the crawler to itself!
+
+```{mermaid}
+graph LR;
+	walk_script[walk_script] --> ast.parse[ast.parse];
+	walk_script[walk_script] --> worker_script.read[worker_script.read];
+	walk_script[walk_script] --> ast.walk[ast.walk];
+	get_submodule_desc[get_submodule_desc] --> get_submodule_desc[get_submodule_desc];
+	process_from_import_[process_from_import_node] --> ImportNode.__init__[ImportNode.__init__];
+	process_import_node[process_import_node] --> ImportNode.__init__[ImportNode.__init__];
+	process_call_node[process_call_node] --> print_call_node_info[print_call_node_info];
+	process_call_node[process_call_node] --> get_submodule_desc[get_submodule_desc];
+	process_call_node[process_call_node] --> CallNode.__init__[CallNode.__init__];
+	process_call_node[process_call_node] --> CallNode.__init__[CallNode.__init__];
+	process_func_def_nod[process_func_def_node] --> FuncDefNode.__init__[FuncDefNode.__init__];
+	process_class_node[process_class_node] --> ClassNode.__init__[ClassNode.__init__];
+	process_class_func_n[process_class_func_node] --> FuncDefNode.__init__[FuncDefNode.__init__];
+	add_import[add_import] --> process_import_node[process_import_node];
+	add_import[add_import] --> process_from_import_[process_from_import_node];
+	add_call_or_import[add_call_or_import] --> process_import_node[process_import_node];
+	add_call_or_import[add_call_or_import] --> process_from_import_[process_from_import_node];
+	add_call_or_import[add_call_or_import] --> process_call_node[process_call_node];
+	walk_node_children[walk_node_children] --> ast.walk[ast.walk];
+	process_class_functi[process_class_function_def] --> process_func_def_nod[process_func_def_node];
+	process_class_functi[process_class_function_def] --> process_func_def_chi[process_func_def_children];
+	process_class_method[process_class_methods] --> process_class_functi[process_class_function_def];
+	get_instantiated_obj[get_instantiated_object_name] --> sibling_list.index[sibling_list.index];
+	update_call_data_for[update_call_data_for_object_info] --> get_instantiated_obj[get_instantiated_object_name];
+	process_func_def_chi[process_func_def_children] --> walk_node_children[walk_node_children];
+	process_func_def_chi[process_func_def_children] --> process_func_def_nod[process_func_def_node];
+	process_func_def_chi[process_func_def_children] --> add_import[add_import];
+	process_func_def_chi[process_func_def_children] --> process_call_node[process_call_node];
+	process_func_def_chi[process_func_def_children] --> update_call_data_for[update_call_data_for_object_info];
+	process_script_work[process_script_work] --> walk_node_children[walk_node_children];
+	process_script_work[process_script_work] --> process_call_node[process_call_node];
+	process_script_work[process_script_work] --> update_call_data_for[update_call_data_for_object_info];
+	parse_module_node[parse_module_node] --> process_class_method[process_class_methods];
+	parse_module_node[parse_module_node] --> process_class_node[process_class_node];
+	parse_module_node[parse_module_node] --> process_func_def_nod[process_func_def_node];
+	parse_module_node[parse_module_node] --> process_func_def_chi[process_func_def_children];
+	parse_module_node[parse_module_node] --> add_import[add_import];
+	parse_module_node[parse_module_node] --> process_script_work[process_script_work];
+	manage_module_import[manage_module_imports] --> collections.defaultd[collections.defaultdict];
+	manage_module_import[manage_module_imports] --> ImportNode.__init__[ImportNode.__init__];
+	get_walked_scripted_[get_walked_scripted_from_filename] --> pathlib.Path[pathlib.Path];
+	get_walked_scripted_[get_walked_scripted_from_filename] --> walk_script[walk_script];
+	get_top_level_node_f[get_top_level_node_from_filename] --> ast.parse[ast.parse];
+	get_top_level_node_f[get_top_level_node_from_filename] --> script_contents.read[script_contents.read];
+	extract_node_structu[extract_node_structure_from_script] --> pathlib.Path[pathlib.Path];
+	extract_node_structu[extract_node_structure_from_script] --> get_top_level_node_f[get_top_level_node_from_filename];
+	extract_node_structu[extract_node_structure_from_script] --> parse_module_node[parse_module_node];
+	extract_node_structu[extract_node_structure_from_script] --> manage_module_import[manage_module_imports];
+subgraph ImportNode
+
+end
+subgraph CallNode
+
+end
+subgraph FuncDefNode
+
+end
+subgraph ClassNode
+
+end
+subgraph pathlib
+	pathlib.Path
+end
+subgraph collections
+	collections.defaultd
+end
+subgraph ast
+	ast.parse
+	ast.walk
+end
+```
+
+* you can nicely see the recursive nature of the process where `get_submodule_desc` is pointing to itself
+* the class subgraphs for our data containers like `ImportNode` and `ClassNode` are empty. This is because we're using `@dataclass` for simplicity. A potential improvement would be parsing them knowing that they have `__init__` methods coming from the decorator
+* we can also see some dead code where `process_class_func_node` has nothing depending on it and we know we aren't calling it
+
+### Collections
+
+Finally, let's look at one of the standard library modules. Given we use `collections` when building this crawler, that seems like a fun choice.
+
+On my machine (I'm using WSL 2), the library is stored at `/usr/lib/python3.8/collections`. So, I extract the module by pointing to that directory, which has two files `__init__` and `abc`. The latter is pretty sparse, because it's just performing imports.
+
+If we were to get the entire graph for collections it would actually be pretty horrendous. This is because it has many classes in it and each class performs a ton of calls. To give you the power to select a subgraph of the code information there are options for `create_graph_description`:
+
+* `wanted_classes` - only display information about the classes whose names are in this list
+* `include_body_commands` - include the calls that are made in the body of the script
+* `include_function_defs` - include details about the module's non-class function definitions
+
+First, we extract the information to create the module info:
+
+```python
+collections_location = "/usr/lib/python3.8/collections"
+m_info = extract_code_information(directories=[collections_location])
+```
+
+Then with `[c.name for c in m_info["__init__"]["class_list"]]` we can see these are the classes in `__init__.py`:
+
+```python
+['_OrderedDictKeysView',
+ '_OrderedDictItemsView',
+ '_OrderedDictValuesView',
+ '_Link',
+ 'OrderedDict',
+ 'Counter',
+ 'ChainMap',
+ 'UserDict',
+ 'UserList',
+ 'UserString']
+ ```
+
+If we only want information about `OrderedDict` then we use `create_graph_description` with these arguments to mute body calls and other function definitions:
+
+```python
+create_graph_description(
+    m_info["__init__"],
+    wanted_classes=["OrderedDict"],
+    include_body_commands=False,
+    include_function_defs=False
+)
+```
+
+```{mermaid}
+graph LR;
+	OrderedDict.__init__[OrderedDict.__init__] --> _Link.__init__[_Link.__init__];
+	OrderedDict.__init__[OrderedDict.__init__] --> _proxy[_proxy];
+	OrderedDict.__init__[OrderedDict.__init__] --> self.__update[self.__update];
+	OrderedDict.__setite[OrderedDict.__setitem__] --> Link[Link];
+	OrderedDict.__setite[OrderedDict.__setitem__] --> proxy[proxy];
+	OrderedDict.__setite[OrderedDict.__setitem__] --> dict_setitem[dict_setitem];
+	OrderedDict.__delite[OrderedDict.__delitem__] --> dict_delitem[dict_delitem];
+	OrderedDict.__delite[OrderedDict.__delitem__] --> self.__map.pop[self.__map.pop];
+	OrderedDict.clear[OrderedDict.clear] --> self.__map.clear[self.__map.clear];
+	OrderedDict.clear[OrderedDict.clear] --> dict.clear[dict.clear];
+	OrderedDict.popitem[OrderedDict.popitem] --> dict.pop[dict.pop];
+	OrderedDict.__sizeof[OrderedDict.__sizeof__] --> sizeof[sizeof];
+	OrderedDict.__sizeof[OrderedDict.__sizeof__] --> sizeof[sizeof];
+	OrderedDict.__sizeof[OrderedDict.__sizeof__] --> sizeof[sizeof];
+	OrderedDict.__sizeof[OrderedDict.__sizeof__] --> sizeof[sizeof];
+	OrderedDict.keys[OrderedDict.keys] --> _OrderedDictKeysView[_OrderedDictKeysView.__init__];
+	OrderedDict.items[OrderedDict.items] --> _OrderedDictItemsVie[_OrderedDictItemsView.__init__];
+	OrderedDict.values[OrderedDict.values] --> _OrderedDictValuesVi[_OrderedDictValuesView.__init__];
+	OrderedDict.__reduce[OrderedDict.__reduce__] --> copy[copy];
+	OrderedDict.__reduce[OrderedDict.__reduce__] --> vars[vars];
+	OrderedDict.__reduce[OrderedDict.__reduce__] --> vars[vars];
+	OrderedDict.__reduce[OrderedDict.__reduce__] --> OrderedDict.__init__[OrderedDict.__init__];
+	OrderedDict.__reduce[OrderedDict.__reduce__] --> inst_dict.pop[inst_dict.pop];
+	OrderedDict.copy[OrderedDict.copy] --> self.__class__[self.__class__];
+	OrderedDict.__eq__[OrderedDict.__eq__] --> dict.__eq__[dict.__eq__];
+	OrderedDict.__eq__[OrderedDict.__eq__] --> dict.__eq__[dict.__eq__];
+subgraph OrderedDict
+	OrderedDict.__init__
+	OrderedDict.__setite
+	OrderedDict.__delite
+	OrderedDict.__iter__
+	OrderedDict.__revers
+	OrderedDict.clear
+	OrderedDict.popitem
+	OrderedDict.move_to_
+	OrderedDict.__sizeof
+	OrderedDict.keys
+	OrderedDict.items
+	OrderedDict.values
+	OrderedDict.pop
+	OrderedDict.setdefau
+	OrderedDict.__repr__
+	OrderedDict.__reduce
+	OrderedDict.copy
+	OrderedDict.fromkeys
+	OrderedDict.__eq__
+end
+subgraph _collections_abc
+	_collections_abc.Mut
+end
+subgraph _sys
+	_sys._getframe
+	_sys.intern
+end
+subgraph warnings
+	warnings.warn
+end
+```
+
+* despite being a more complex example, the call depth is actually pretty shallow
+* many operations are defined in terms of operations of simpler data structures, in this case operations on regular dictionaries
+* we have some external module data here, from `warnings`, `_sys`, and `_collections_abc`. These aren't used by `OrderedDict`, but are handled differently, so you would have to do a little more work to mute them.
+
+Let's look at another class (`Counter`) but show any non-class functions and work done in the script. We do this using the fact that the defaults are `True` for showing that data:
+
+```python
+create_graph_description(m_info["__init__"], wanted_classes=["Counter"])
+```
+
+```{mermaid}
+graph LR;
+	__getattr__[__getattr__] --> getattr[getattr];
+	__getattr__[__getattr__] --> warnings.warn[warnings.warn];
+	__getattr__[__getattr__] --> globals[globals];
+	__getattr__[__getattr__] --> AttributeError[AttributeError];
+	namedtuple[namedtuple] --> field_names.replace[field_names.replace];
+	namedtuple[namedtuple] --> _sys.intern[_sys.intern];
+	namedtuple[namedtuple] --> seen.add[seen.add];
+	namedtuple[namedtuple] --> _iskeyword[_iskeyword];
+	namedtuple[namedtuple] --> name.startswith[name.startswith];
+	namedtuple[namedtuple] --> name.isidentifier[name.isidentifier];
+	namedtuple[namedtuple] --> _iskeyword[_iskeyword];
+	namedtuple[namedtuple] --> name.isidentifier[name.isidentifier];
+	namedtuple[namedtuple] --> seen.add[seen.add];
+	namedtuple[namedtuple] --> name.startswith[name.startswith];
+	namedtuple[namedtuple] --> exec[exec];
+	namedtuple[namedtuple] --> tuple_new[tuple_new];
+	namedtuple[namedtuple] --> _len[_len];
+	namedtuple[namedtuple] --> self._make[self._make];
+	namedtuple[namedtuple] --> _map[_map];
+	namedtuple[namedtuple] --> _dict[_dict];
+	namedtuple[namedtuple] --> _zip[_zip];
+	namedtuple[namedtuple] --> _tuple[_tuple];
+	namedtuple[namedtuple] --> _sys.intern[_sys.intern];
+	namedtuple[namedtuple] --> _tuplegetter[_tuplegetter];
+	namedtuple[namedtuple] --> f_globals.get[f_globals.get];
+	namedtuple[namedtuple] --> _sys._getframe[_sys._getframe];
+	_count_elements[_count_elements] --> mapping_get[mapping_get];
+	Counter.__init__[Counter.__init__] --> __init__[__init__];
+	Counter.__init__[Counter.__init__] --> super[super];
+	Counter.__init__[Counter.__init__] --> self.update[self.update];
+	Counter.most_common[Counter.most_common] --> sorted[sorted];
+	Counter.most_common[Counter.most_common] --> _itemgetter[_itemgetter];
+	Counter.most_common[Counter.most_common] --> _heapq.nlargest[_heapq.nlargest];
+	Counter.most_common[Counter.most_common] --> _itemgetter[_itemgetter];
+	Counter.elements[Counter.elements] --> _chain.from_iterable[_chain.from_iterable];
+	Counter.elements[Counter.elements] --> _starmap[_starmap];
+	Counter.fromkeys[Counter.fromkeys] --> NotImplementedError[NotImplementedError];
+	Counter.update[Counter.update] --> _count_elements[_count_elements];
+	Counter.update[Counter.update] --> update[update];
+	Counter.update[Counter.update] --> self_get[self_get];
+	Counter.update[Counter.update] --> super[super];
+	Counter.update[Counter.update] --> self.update[self.update];
+	Counter.subtract[Counter.subtract] --> self_get[self_get];
+	Counter.subtract[Counter.subtract] --> self_get[self_get];
+	Counter.subtract[Counter.subtract] --> self.subtract[self.subtract];
+	Counter.copy[Counter.copy] --> self.__class__[self.__class__];
+	Counter.__delitem__[Counter.__delitem__] --> __delitem__[__delitem__];
+	Counter.__delitem__[Counter.__delitem__] --> super[super];
+	Counter.__repr__[Counter.__repr__] --> format[format];
+	Counter.__repr__[Counter.__repr__] --> self.most_common[self.most_common];
+	Counter.__add__[Counter.__add__] --> Counter.__init__[Counter.__init__];
+	Counter.__sub__[Counter.__sub__] --> Counter.__init__[Counter.__init__];
+	Counter.__or__[Counter.__or__] --> Counter.__init__[Counter.__init__];
+	Counter.__and__[Counter.__and__] --> Counter.__init__[Counter.__init__];
+	Counter.__pos__[Counter.__pos__] --> Counter.__init__[Counter.__init__];
+	Counter.__neg__[Counter.__neg__] --> Counter.__init__[Counter.__init__];
+	Counter.__iadd__[Counter.__iadd__] --> self._keep_positive[self._keep_positive];
+	Counter.__isub__[Counter.__isub__] --> self._keep_positive[self._keep_positive];
+	Counter.__ior__[Counter.__ior__] --> self._keep_positive[self._keep_positive];
+	Counter.__iand__[Counter.__iand__] --> self._keep_positive[self._keep_positive];
+	main[main] --> _collections_abc.Mut[_collections_abc.MutableSequence.register];
+	main[main] --> property[property];
+	main[main] --> _itemgetter[_itemgetter];
+	main[main] --> getattr[getattr];
+	main[main] --> warnings.warn[warnings.warn];
+	main[main] --> globals[globals];
+	main[main] --> AttributeError[AttributeError];
+	main[main] --> field_names.replace[field_names.replace];
+	main[main] --> _sys.intern[_sys.intern];
+	main[main] --> seen.add[seen.add];
+	main[main] --> _iskeyword[_iskeyword];
+	main[main] --> name.startswith[name.startswith];
+	main[main] --> name.isidentifier[name.isidentifier];
+	main[main] --> _iskeyword[_iskeyword];
+	main[main] --> name.isidentifier[name.isidentifier];
+	main[main] --> seen.add[seen.add];
+	main[main] --> name.startswith[name.startswith];
+	main[main] --> exec[exec];
+	main[main] --> tuple_new[tuple_new];
+	main[main] --> _len[_len];
+	main[main] --> self._make[self._make];
+	main[main] --> _map[_map];
+	main[main] --> _dict[_dict];
+	main[main] --> _zip[_zip];
+	main[main] --> _tuple[_tuple];
+	main[main] --> _sys.intern[_sys.intern];
+	main[main] --> _tuplegetter[_tuplegetter];
+	main[main] --> f_globals.get[f_globals.get];
+	main[main] --> _sys._getframe[_sys._getframe];
+	main[main] --> mapping_get[mapping_get];
+	main[main] --> getattr[getattr];
+	main[main] --> warnings.warn[warnings.warn];
+	main[main] --> globals[globals];
+	main[main] --> AttributeError[AttributeError];
+	main[main] --> field_names.replace[field_names.replace];
+	main[main] --> _sys.intern[_sys.intern];
+	main[main] --> seen.add[seen.add];
+	main[main] --> _iskeyword[_iskeyword];
+	main[main] --> name.startswith[name.startswith];
+	main[main] --> name.isidentifier[name.isidentifier];
+	main[main] --> _iskeyword[_iskeyword];
+	main[main] --> name.isidentifier[name.isidentifier];
+	main[main] --> seen.add[seen.add];
+	main[main] --> name.startswith[name.startswith];
+	main[main] --> exec[exec];
+	main[main] --> tuple_new[tuple_new];
+	main[main] --> _len[_len];
+	main[main] --> self._make[self._make];
+	main[main] --> _map[_map];
+	main[main] --> _dict[_dict];
+	main[main] --> _zip[_zip];
+	main[main] --> _tuple[_tuple];
+	main[main] --> _sys.intern[_sys.intern];
+	main[main] --> _tuplegetter[_tuplegetter];
+	main[main] --> f_globals.get[f_globals.get];
+	main[main] --> _sys._getframe[_sys._getframe];
+	main[main] --> mapping_get[mapping_get];
+subgraph Counter
+	Counter.__init__
+	Counter.__missing__
+	Counter.most_common
+	Counter.elements
+	Counter.fromkeys
+	Counter.update
+	Counter.subtract
+	Counter.copy
+	Counter.__reduce__
+	Counter.__delitem__
+	Counter.__repr__
+	Counter.__add__
+	Counter.__sub__
+	Counter.__or__
+	Counter.__and__
+	Counter.__pos__
+	Counter.__neg__
+	Counter._keep_positi
+	Counter.__iadd__
+	Counter.__isub__
+	Counter.__ior__
+	Counter.__iand__
+end
+subgraph _collections_abc
+	_collections_abc.Mut
+end
+subgraph _sys
+	_sys._getframe
+	_sys.intern
+end
+subgraph warnings
+	warnings.warn
+end
+```
+
+We can see that there is a lot going on, but also a lot of common boiler plate used. When you are inspecting more complicated module likes this, you'll want to use the options provided to break it into more readable chunks.
+
+## `pygraphcrawler` - Code Graph Creation
+
+The [final repo is here](https://github.com/Spstolar/pycodecrawler). The main parts are
+
+* `code_extraction.py` - entry point script to coordinate which files to parse and run the parser
+* `dep_parser.py` - generate module info by parsing a module using `ast`
+* `code_graph.py` - convert module info into graph edge data
+* `viz_code.py` - use edge data and module info to create Mermaid graph descriptions.
+
+### Crawl Code
+
+We start by parsing the full script and look at the top-level module node. This lets us know the name of the script and gives us its immediate children in the `ast` graph.
+
+```python
+module_node = get_top_level_node_from_filename(path)
+
+import_list, call_list, func_defs, class_list = parse_module_node(
+    module_node, current_module_name, verbose=verbose
+)
+```
+
+This work is done in `parse_module_node`, where we go through each node in the body of the `module_node` and depending on the node type, process it and its child `ast` nodes. This allows us to distinguish calls to functions that are made inside function definitions from calls that are made in the general script, as well as annotate those dependencies. By walking these parsed elements, we can extract the data stored in an `ast` node and convert it to more convenient classes. For instance rather than working with `ast.Call` objects we use a custom `CallNode` object:
+
+```python
+@dataclass
+class CallNode:
+    module: str  # what module does the called function belong to
+    name: str  # function name
+    call_lineno: int  # where was the call
+    called_by: str = None  # what was the caller
+```
+
+Then, provided an `ast.Call` node, we parse it for that data above like this:
+
+```python
+func_data = node.func  # func is an attribute of an ast.Call object
+
+# func_data can either be an Attribute or a Name, which require
+# different ways to access their properties
+if isinstance(func_data, ast.Attribute):
+    function_name = func_data.attr
+    value = func_data.value
+    # handle submodule calls like np.linalg.norm
+    submodule_desc = get_submodule_desc(value)  
+    submodule_desc.reverse()
+
+    call_node = CallNode(
+        module=submodule_desc, name=function_name, call_lineno=node.lineno
+    )
+elif isinstance(func_data, ast.Name):
+    call_node = CallNode(
+        name=func_data.id,
+        module=[],  # the call node did not have this detail, requiring separate handling
+        call_lineno=node.lineno,
+    )
+else:
+    print("error")
+    print(node)
+    return None
+```
+
+By parsing it, we have an easier way to reference the call and its properties. We have similar classes and parsers for the other node types.
+
+Once we have the module data we collect it into a dictionary specifying:
+
+* `import_list` - which modules were imported and where did we call them
+* `call_list` - all function calls
+* `func_defs` - function definitions
+* `class_list` - class data including methods
+
+From here, we can take this parsed module data and convert it to edges. This is where we can prune some of the lower level function calls (like `print()`) that we are not interested in visualizing. We also can compress multiple calls from one function to another into a single edge with a weight tracking the call count (as in the first example).
+
+Finally, we take the edges and module data and create the Mermaid graph description:
+
+* edge data allows us to specify the graph edges and carefully check naming conventions
+* module data lets us create subgraphs to group calls into the same external module. Grouping calls in this way makes dependencies a lot easier to understand.
+* module data also enables grouping class methods
+
+## Uses
+
+### Code Analysis
+
+As we saw in the examples, the code graph can tell us some basic things at a glance:
+
+* what are the top level functions - look at the nodes farthest to the left
+* what external libraries do we have the most dependencies on - look at call counts into the module subgraphs and terminal nodes with many ancestors
+* do we have dead code - is there a component of the graph that contains a top level function we no longer use?
+
+### Documentation
+
+For smaller modules, this is also a form of documentation. You can get a pretty good idea of what a function is doing by looking at its name and what it calls. For larger modules, this still applies but something with many definitions can become cluttered and you may want to break it into pieces.
+
+## Extensions
+
+### Code Similarity
+
+> Given two code graphs, how can we measure similarity?
+
+* use basic graph similarity measures from a graph object constructed from the edge data
+* use the calls into external modules and see how much they overlap
+* use the markdown graph as a compressed version of two modules and run text similarity methods, which can be difficult to run on the non-compressed original source
+
+By identifying when we have similar code structures, we can begin to develop better abstractions of code (as needed). Right now, this only generates the graph data, but this would be a possible extension of that data.
+
+### Code Generation
+
+> Using the basic building blocks of an answer to a small problem, can we randomly recreate it?
+
+This is more of a fringe use case, but you could use the inter-function dependency data to shrink the space of grammatical code expressions in order to randomly generate code. Not quite a copilot by any stretch, but could generate some interesting results.
+
+## Lessons Learned
+
+### When to Walk, When to Run
+
+Initially, I was parsing code using the full list of nodes generated by `ast.walk()`. Unfortunately, this makes it difficult to connect calls to the function definitions they may reside in. In the walked list, you can get a function definition node followed by call nodes in the list, but it then requires more work to determine if those calls were in the function definition or outside of it just later in the walked tree. You could get around this with line number comparisons (I leave some deprecated functions in the repo for doing this), but I found it simpler to recursively use the node structure generated by `ast`.
+
+On the other hand, you sometimes do want to sweep through all the child nodes. When you manually walk the tree, you can end up with heavily nested structure to call. For instance, `f() + (2 * (g() + h()))` involves going through the expression and parsing binary operations and nested expressions just to get the data that you care about (the three functions that were called).
+
+When you crawl the node structure, selectively using `ast.walk` on some of the child nodes of the top level module node can avoid this. Get the highest level nodes -- like classes and function definitions -- and then allow `ast` to quickly walk all the children of those nodes so you can get all the data you care about and also tie it to those higher level nodes.
+
+### Keywords and Meta-programming
+
+In my graph description generator, I'm careful to rename words like "map" and "find" when they are used outside of node labels. This is because these appear to be keywords of the process of generating the graph image from the markdown, so including them as regular names of nodes will cause the preview to error out on VSCode. There was also a special case for the word "end" appearing as part of a node name because this conflicts with using "end" to delineate subgraphs, but the fix is to capitalize part of "end". This is why it is important to have input sanitation performed before compiling the final product.
+
+This is a general concern to keep in mind, when you're creating descriptions of code you want to be careful about escaping problematic terms so that whatever system you are using does not confuse a command with a description. I found similar issues when printing out the Mermaid graphs in a notebook, sometimes causing the entire notebook to hit some invalid states. Hard to issue good guidance other than "be on the lookout."
+
+### Low-level Calls
+
+In common expressions like `some_list.append(item)` you are performing a function call. While it may be useful to see this in the final graph, I found that it cluttered the visualization. To get around this, I kept such things in the parsed data, but use explicit lists of common function names to exclude when creating the graph markdown. Along with some rules for how to handle parsing a call's module, this removed a lot of noise.
+
+This is an opportunity for improvement though, because I'm using simple rules to determine when to skip over calls. Ideally using something to determine the type of object a function is attached to (are we running an operation on a dictionary or a list) would improve this.
+
+### Classes
+
+Related to difficulty in detecting type information, when you have class definitions involved things begin to get tricky. In fact, I thought I was done with the project before I saw how large of a gap effectively processing classes was. 
+
+Getting the function definition information out of class methods is straightforward, because things are nicely grouped in an `ast` node for the class. Less obvious is how to determine when you are making a call to an instantiated object of a class.
+
+My solution was a hack: when you have a call, check if the name overlaps with any of the names of classes in the module. If so, it's likely creating an object, so jump up the walked syntax tree to the assignment and keep track of the name used for the assignment target (the `x` in `x = 1`). Then in that scope you know any calls involving that object name are calls to the class methods and you can track it appropriately.
+
+To do this "the right way" you would have to almost run your own version of the interpreter, as mentioned in the low-level calls lesson. This would definitely be an interesting problem to work on, but I'm satisfied omitting the ability to parse more elaborate Python code in this visualizer. 
+
+## Have Fun
+
+Feel free to experiment with [the code](https://github.com/Spstolar/pycodecrawler/blob/main/code_graph.py) and let me know if you find other use cases or if you'd like to contribute.
