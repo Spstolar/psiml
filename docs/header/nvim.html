@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ψML – how_to_quarto</title>
+<title>ψML - nvim</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,24 +57,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -97,7 +97,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">ψML</span>
     </a>
   </div>
@@ -118,15 +118,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./header/refs.html" rel="" target="">
+    <a class="nav-link" href="../header/refs.html" rel="" target="">
  <span class="menu-text">Refs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./header/nvim.html" rel="" target="">
+    <a class="nav-link active" href="../header/nvim.html" rel="" target="" aria-current="page">
  <span class="menu-text">nvim</span></a>
   </li>  
   <li class="nav-item compact">
@@ -150,26 +150,165 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">nvim</h1>
+</div>
 
 
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<section id="apt-get" class="level3">
-<h3 class="anchored" data-anchor-id="apt-get"><code>apt-get</code></h3>
-<p><code>sudo apt-get install quarto</code></p>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><code>vim</code> is nice because of its ubiquity on terminals. However, if you have the ability to perform installs and you spend a lot of time on the machine, then it may be worth getting to know <code>nvim</code>.</p>
+<p>Here are some notes on using and setting up a fairly nice system.</p>
+<section id="use" class="level1">
+<h1>Use</h1>
+<section id="autocomplete" class="level2">
+<h2 class="anchored" data-anchor-id="autocomplete">autocomplete</h2>
+<ul>
+<li>when you have an autocomplete option:
+<ul>
+<li><code>ctrl + enter</code> - do not autocomplete and instead go to next line</li>
+<li><code>enter</code> or <code>ctrl + y</code> - use autocomplete option</li>
+<li><code>C-p</code> and <code>C-n</code> - go to previous/next autocomplete option</li>
+<li><code>tab</code> - does nothing!</li>
+</ul></li>
+</ul>
 </section>
-<section id="install-from-.deb" class="level3">
-<h3 class="anchored" data-anchor-id="install-from-.deb">Install from <code>.deb</code></h3>
-<p>Get link from https://quarto.org/docs/download/</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> link  <span class="co"># downloads quarto-someVersion-linux-amd64.deb</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dpkg <span class="at">-i</span> quarto-someVersion-linux-amd64.deb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="searchingnavigation" class="level2">
+<h2 class="anchored" data-anchor-id="searchingnavigation">searching/navigation</h2>
+<ul>
+<li><code>&lt;leader&gt;pf</code> - Lists files in your current working directory, respects <code>.gitignore</code></li>
+<li><code>&lt;C-p&gt;</code> - Fuzzy search through the output of <code>git ls-files</code> command, respects <code>.gitignore</code></li>
+<li><code>&lt;leader&gt;ps</code> string - grep search for string in current working directory</li>
+</ul>
+</section>
+<section id="folding" class="level2">
+<h2 class="anchored" data-anchor-id="folding">folding</h2>
+<p><a href="https://neovim.io/doc/user/fold.html">docs</a></p>
+<ul>
+<li><code>za</code> - toggle fold at cursor</li>
+</ul>
+<p>TODO: figure out how to do smart folding on a markdown document</p>
+</section>
+<section id="help" class="level2">
+<h2 class="anchored" data-anchor-id="help">help</h2>
+<p>Run <code>:help</code> in <code>nvim</code> to go to the guide. Where applicable, the help guide section will be listed to allow easily finding more information.</p>
 </section>
 </section>
-<section id="build" class="level2">
-<h2 class="anchored" data-anchor-id="build">Build</h2>
-<p>quarto preview quarto render</p>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<section id="plugin-management-with-packer" class="level2">
+<h2 class="anchored" data-anchor-id="plugin-management-with-packer">plugin management with Packer</h2>
+<p>Go to <code>packer.lua</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">:so</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">:PackerSync</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="useful-plugins" class="level2">
+<h2 class="anchored" data-anchor-id="useful-plugins">Useful Plugins</h2>
+<section id="treesitter" class="level3">
+<h3 class="anchored" data-anchor-id="treesitter">treesitter</h3>
+<p><a href="https://github.com/nvim-treesitter/nvim-treesitter">nvim-treesitter</a></p>
+<p>This is a parser that builds a syntax tree for a file as you edit it. This usually provides a faster and more accurate syntax highlighter than techniques using regex.</p>
+<p>Nice writeup on uses <a href="https://thevaluable.dev/tree-sitter-neovim-overview/">here</a>.</p>
+<p>I have c, lua, vim, help, rust, js, python and scala installed, but it can find others on the fly.</p>
+</section>
+<section id="telescope" class="level3">
+<h3 class="anchored" data-anchor-id="telescope">telescope</h3>
+<ul>
+<li><a href="https://github.com/nvim-telescope/telescope.nvim">telescope</a></li>
+</ul>
+<p>This is a code fuzzy finder.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">builtin</span> <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">'telescope.builtin'</span><span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">vim</span><span class="op">.</span><span class="va">keymap</span><span class="op">.</span>set<span class="op">(</span><span class="st">'n'</span><span class="op">,</span> <span class="st">'&lt;leader&gt;pf'</span><span class="op">,</span> <span class="va">builtin</span><span class="op">.</span><span class="va">find_files</span><span class="op">,</span> <span class="op">{})</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">vim</span><span class="op">.</span><span class="va">keymap</span><span class="op">.</span>set<span class="op">(</span><span class="st">'n'</span><span class="op">,</span> <span class="st">'&lt;C-p&gt;'</span><span class="op">,</span> <span class="va">builtin</span><span class="op">.</span><span class="va">git_files</span><span class="op">,</span> <span class="op">{})</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">vim</span><span class="op">.</span><span class="va">keymap</span><span class="op">.</span>set<span class="op">(</span><span class="st">'n'</span><span class="op">,</span> <span class="st">'&lt;leader&gt;ps'</span><span class="op">,</span> <span class="kw">function</span><span class="op">()</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">builtin</span><span class="op">.</span>grep_string<span class="op">({</span> <span class="va">search</span> <span class="op">=</span> <span class="va">vim</span><span class="op">.</span><span class="va">fn</span><span class="op">.</span>input<span class="op">(</span><span class="st">"Grep &gt; "</span><span class="op">)</span> <span class="op">});</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="undotree" class="level3">
+<h3 class="anchored" data-anchor-id="undotree">undotree</h3>
+<p><a href="https://github.com/mbbill/undotree">undotree</a></p>
+</section>
+<section id="harpoon" class="level3">
+<h3 class="anchored" data-anchor-id="harpoon">harpoon</h3>
+<p><a href="https://github.com/ThePrimeagen/harpoon">harpoon</a></p>
+</section>
+<section id="fugitive" class="level3">
+<h3 class="anchored" data-anchor-id="fugitive">Fugitive</h3>
+<ul>
+<li><a href="https://github.com/tpope/vim-fugitive">vim-fugitive</a></li>
+</ul>
+<p>Allows you to do <code>git</code> stuff without leaving nvim.</p>
+<p>Giving this a leader shortcut makes it easier to use.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- after/plugins/fugitive</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">vim</span><span class="op">.</span><span class="va">keymap</span><span class="op">.</span>set<span class="op">(</span><span class="st">"n"</span><span class="op">,</span> <span class="st">"&lt;leader&gt;gs"</span><span class="op">,</span> <span class="va">vim</span><span class="op">.</span><span class="va">cmd</span><span class="op">.</span><span class="cn">G</span><span class="va">it</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then <code>&lt;leader&gt;gs</code> followed by <code>commit</code> allows you to perform a <code>git commit</code>.</p>
+</section>
+<section id="lsp" class="level3">
+<h3 class="anchored" data-anchor-id="lsp">lsp</h3>
+<p><a href="https://neovim.io/doc/user/lsp.html">docs</a></p>
+<p>This is how you enable language-specific autocompletion.</p>
+</section>
+</section>
+<section id="lua-functions" class="level2">
+<h2 class="anchored" data-anchor-id="lua-functions">Lua functions</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">:lua</span> FunctionName<span class="er">(</span><span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="configuration-structure" class="level2">
+<h2 class="anchored" data-anchor-id="configuration-structure">Configuration Structure</h2>
+<p><code>lua-guide-config</code></p>
+<ul>
+<li>Everything should be in <code>~/.config/nvim</code>.</li>
+<li>The base file is <code>init.lua</code>.</li>
+<li>Anything in <code>plugin/</code> will run on startup if <code>plugin/</code> is in <code>runtimepath</code>, the directory where nvim looks for stuff.</li>
+<li>These are specially designated to be searched for and ran first:
+<ul>
+<li><code>filetype.lua</code> filetypes |new-filetype|</li>
+<li><code>autoload/</code> automatically loaded scripts |autoload-functions|</li>
+<li><code>colors/</code> color scheme files |:colorscheme|</li>
+<li><code>compiler/</code> compiler files |:compiler|</li>
+<li><code>doc/</code> documentation |write-local-help|</li>
+<li><code>ftplugin/</code> filetype plugins |write-filetype-plugin|</li>
+<li><code>indent/</code> indent scripts |indent-expression|</li>
+<li><code>keymap/</code> key mapping files |mbyte-keymap|</li>
+<li><code>lang/</code> menu translations |:menutrans|</li>
+<li><code>lua/</code> |Lua| plugins</li>
+<li><code>menu.vim</code> GUI menus |menu.vim|</li>
+<li><code>pack/</code> packages |:packadd|</li>
+<li><code>parser/</code> |treesitter| syntax parsers</li>
+<li><code>plugin/</code> plugin scripts |write-plugin|</li>
+<li><code>query/</code> |treesitter| queries</li>
+<li><code>rplugin/</code> |remote-plugin| scripts</li>
+<li><code>spell/</code> spell checking files |spell|</li>
+<li><code>syntax/</code> syntax files |mysyntaxfile|</li>
+<li><code>tutor/</code> tutorial files |:Tutor|</li>
+</ul></li>
+<li>then <code>after/</code> is searched (see <code>after-directory</code>)</li>
+</ul>
+</section>
+<section id="issues" class="level2">
+<h2 class="anchored" data-anchor-id="issues">Issues</h2>
+<section id="error-for-treesitter-and-lua" class="level3">
+<h3 class="anchored" data-anchor-id="error-for-treesitter-and-lua">Error for treesitter and lua</h3>
+<pre><code>Error executing lua callback: ...-linux64/share/nvim/runtime/lua/vim/treesitter/query.lua:219: 
+query: invalid node type at position 3406 for language lua stack traceback:</code></pre>
+<pre><code>:TSUpdate 
+&gt; -linux64/share/nvim/runtime/lua/vim/treesitter/query.lua:219: query: invalid node type at position 3406 for language lua"</code></pre>
+<p>Tree-sitter was having issues. <code>:TSUpdate</code> did not help.</p>
+<p>Ended up having to delete the tree-sitter folder in: <code>~/.local/share/nvim/</code></p>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

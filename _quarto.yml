@@ -10,6 +10,7 @@ website:
     right:
       - about.qmd
       - header/refs.qmd
+      - header/nvim.qmd
       - icon: github
         href: https://github.com/spstolar
 format:

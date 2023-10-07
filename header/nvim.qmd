@@ -1,0 +1,163 @@
+---
+title: nvim
+---
+
+`vim` is nice because of its ubiquity on terminals. However, if you have the 
+ability to perform installs and you spend a lot of time on the machine, then it
+may be worth getting to know `nvim`.
+
+Here are some notes on using and setting up a fairly nice system.
+
+# Use
+
+## autocomplete
+
+* when you have an autocomplete option:
+    * `ctrl + enter` - do not autocomplete and instead go to next line
+    * `enter` or `ctrl + y` - use autocomplete option
+    * `C-p` and `C-n` - go to previous/next autocomplete option
+    * `tab` - does nothing!
+
+## searching/navigation
+
+* `<leader>pf` - Lists files in your current working directory, respects `.gitignore`
+* `<C-p>` - Fuzzy search through the output of `git ls-files` command, respects `.gitignore`
+* `<leader>ps` string - grep search for string in current working directory
+
+## folding
+
+[docs](https://neovim.io/doc/user/fold.html)
+
+* `za` - toggle fold at cursor
+
+TODO: figure out how to do smart folding on a markdown document
+
+
+
+## help
+
+Run `:help` in `nvim` to go to the guide. Where applicable, the help guide section will be listed to allow easily finding more information.
+
+# Setup
+
+## plugin management with Packer
+
+Go to `packer.lua`.
+
+```bash
+:so 
+:PackerSync
+```
+
+## Useful Plugins
+
+### treesitter
+
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+
+This is a parser that builds a syntax tree for a file as you edit it.
+This usually provides a faster and more accurate syntax highlighter than techniques using regex.
+
+Nice writeup on uses [here](https://thevaluable.dev/tree-sitter-neovim-overview/).
+
+I have c, lua, vim, help, rust, js, python and scala installed, but it can find others on the fly.
+
+### telescope
+
+* [telescope](https://github.com/nvim-telescope/telescope.nvim)
+
+This is a code fuzzy finder.
+
+```lua
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+vim.keymap.set('n', '<leader>ps', function()
+        builtin.grep_string({ search = vim.fn.input("Grep > ") });
+end)
+```
+
+### undotree
+
+[undotree](https://github.com/mbbill/undotree)
+
+### harpoon
+
+[harpoon](https://github.com/ThePrimeagen/harpoon)
+
+### Fugitive
+
+* [vim-fugitive](https://github.com/tpope/vim-fugitive)
+
+Allows you to do `git` stuff without leaving nvim.
+
+Giving this a leader shortcut makes it easier to use.
+
+```lua
+-- after/plugins/fugitive
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git);
+```
+
+Then `<leader>gs` followed by `commit` allows you to perform a `git commit`.
+
+### lsp
+
+[docs](https://neovim.io/doc/user/lsp.html)
+
+This is how you enable language-specific autocompletion.
+
+
+## Lua functions
+
+```bash
+:lua FunctionName()
+```
+
+## Configuration Structure
+
+`lua-guide-config`
+
+* Everything should be in `~/.config/nvim`.
+* The base file is `init.lua`.
+* Anything in `plugin/` will run on startup if `plugin/` is in `runtimepath`, the directory where nvim looks for stuff.
+* These are specially designated to be searched for and ran first:
+    * `filetype.lua`	filetypes |new-filetype|
+    * `autoload/`	automatically loaded scripts |autoload-functions|
+    * `colors/`	color scheme files |:colorscheme|
+    * `compiler/`	compiler files |:compiler|
+    * `doc/`		documentation |write-local-help|
+    * `ftplugin/`	filetype plugins |write-filetype-plugin|
+    * `indent/`	indent scripts |indent-expression|
+    * `keymap/`	key mapping files |mbyte-keymap|
+    * `lang/`		menu translations |:menutrans|
+    * `lua/`		|Lua| plugins
+    * `menu.vim`	GUI menus |menu.vim|
+    * `pack/`		packages |:packadd|
+    * `parser/`	|treesitter| syntax parsers
+    * `plugin/`	plugin scripts |write-plugin|
+    * `query/`	|treesitter| queries
+    * `rplugin/`	|remote-plugin| scripts
+    * `spell/`	spell checking files |spell|
+    * `syntax/`	syntax files |mysyntaxfile|
+    * `tutor/`	tutorial files |:Tutor|
+* then `after/` is searched (see `after-directory`)
+
+## Issues
+
+### Error for treesitter and lua
+
+```
+Error executing lua callback: ...-linux64/share/nvim/runtime/lua/vim/treesitter/query.lua:219: 
+query: invalid node type at position 3406 for language lua stack traceback:
+```
+
+```
+:TSUpdate 
+> -linux64/share/nvim/runtime/lua/vim/treesitter/query.lua:219: query: invalid node type at position 3406 for language lua"
+```
+
+
+Tree-sitter was having issues. `:TSUpdate` did not help. 
+
+Ended up having to delete the tree-sitter folder in:
+`~/.local/share/nvim/`
