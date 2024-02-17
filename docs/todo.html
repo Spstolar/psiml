@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2020-07-11">
-<meta name="description" content="Simple construction of image classifiers.">
 
-<title>ψML - FastAI Book Chapter 2</title>
+<title>ψML</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,17 +70,17 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">ψML</span>
     </a>
   </div>
@@ -93,15 +91,15 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../header/refs.html"> 
+    <a class="nav-link" href="./header/refs.html"> 
 <span class="menu-text">Refs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../header/nvim.html"> 
+    <a class="nav-link" href="./header/nvim.html"> 
 <span class="menu-text">nvim</span></a>
   </li>  
   <li class="nav-item compact">
@@ -118,109 +116,28 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">FastAI Book Chapter 2</h1>
-                  <div>
-        <div class="description">
-          Simple construction of image classifiers.
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">ai</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">July 11, 2020</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#fastai-book-chapter-2" id="toc-fastai-book-chapter-2" class="nav-link active" data-scroll-target="#fastai-book-chapter-2">FastAI Book Chapter 2</a>
-  <ul class="collapse">
-  <li><a href="#things-i-learned" id="toc-things-i-learned" class="nav-link" data-scroll-target="#things-i-learned">Things I Learned</a></li>
-  <li><a href="#things-i-had-to-troubleshoot" id="toc-things-i-had-to-troubleshoot" class="nav-link" data-scroll-target="#things-i-had-to-troubleshoot">Things I Had to Troubleshoot</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 
 
-
-<section id="fastai-book-chapter-2" class="level1">
-<h1>FastAI Book Chapter 2</h1>
-<p>I went through the second chapter of the book today, which is why this blog even exists. Highly useful; looking forward to working on some music projects to really learn the material.</p>
-<section id="things-i-learned" class="level2">
-<h2 class="anchored" data-anchor-id="things-i-learned">Things I Learned</h2>
+<section id="todo" class="level1">
+<h1>TODO</h1>
 <ul>
-<li>How to easily build an image classifier to discern between blue jays, mockingbirds, and shrikes.</li>
+<li>using literals in the descriptions puts white text in a grey box</li>
+<li>update descriptions</li>
+<li>fix broken images in circulants post</li>
 </ul>
-<p>I chose the first two bird types based on my familiarity and their Cool Local Bird ranks. I was going to select a cardinal as a third class, but thought it would be too easy to detect the class based solely on color, so I searched around and found shrikes, which looked similar to mockingbirds. The classifier performed very well, which was I semi-shock because I didn’t know:</p>
+<section id="done" class="level2">
+<h2 class="anchored" data-anchor-id="done">DONE</h2>
 <ul>
-<li>You do not always need a lot of data to build a decent model.</li>
+<li>update tags</li>
 </ul>
-<p>Even with 150 examples of each of three classes (before train/validation split), there were only 3 misclassifications on the validation set. This shows how powerful data augmentation can be, but also helps dispel the notion that you need tons of data to do anything reasonable.</p>
-<ul>
-<li>FastAI has some powerful tools that I need to learn.</li>
-</ul>
-<ol type="1">
-<li>Easily display the examples with the highest loss and lowest confidence to see if I can interpret possible deficiencies with <code>interp.plot_top_losses()</code>.</li>
-<li>Clean up the dataset with <code>ImageClassifierCleaner</code>, manually going through some of the examples to change labels or remove them, and then effect the changes with a couple simple for-loops.</li>
-<li>Use <code>verify_images</code> to clean up corrupted files easily.</li>
-<li>Use <code>DataBlock</code> to define the structure of the problem and implement useful transformations for the data.</li>
-</ol>
-<ul>
-<li>Think about how to normalize images.</li>
-</ul>
-<p>Squashing a large image into a smaller one with simple scaling or adding cropped parts of small images is maybe not the best way to make sure the inputs are all “from the same distribution”. You can use <code>RandomResizedCrop</code> to maintain original image quality and also artificially expand the size of your training set.</p>
-<ul>
-<li>Other things:
-<ul>
-<li>How to easily build a dataset with the Bing Image API.</li>
-<li>The usefulness of Path (which I only recently learned about) was really demonstrated nicely.</li>
-<li>The Drivetrain Approach.</li>
-<li>Creating a Notebook App with widgets and Voilà. (Admittedly, I’m still trying to get the latter to work.)</li>
-</ul></li>
-</ul>
-</section>
-<section id="things-i-had-to-troubleshoot" class="level2">
-<h2 class="anchored" data-anchor-id="things-i-had-to-troubleshoot">Things I Had to Troubleshoot</h2>
-<ul>
-<li>How do you find the Bing Image Search key?</li>
-</ul>
-<p>Solution: I signed up for the free Azure thing, went to to the <a href="https://azure.microsoft.com/en-us/services/cognitive-services/bing-image-search-api/">Bing Image Search API</a>, and just had to click to add Bing Search APIs v7 to my subscription. Once I did this it brought up a page with the keys and endpoints.</p>
-<ul>
-<li>I am using my local computer, with Windows, to run the notebooks. So, I have run into (standard) issues. Namely, I saw <code>RuntimeError: cuda runtime error (801) : operation not supported at...</code> when I first attempted to fine tune the learner <code>learn.fine_tune(4)</code>.</li>
-</ul>
-<p>Solution: When you google the error <a href="https://github.com/fastai/fastbook/issues/85">this issue page</a> points you to the forum, but also usefully mentions the “need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.” So, doing this when you define the dataloaders <code>dls = bears.dataloaders(path, num_workers=0)</code> cleared it up for me.</p>
-<ul>
-<li>Some minor formatting issues with <code>interp.plot_top_losses(5, nrows=1)</code>. The text above the images was overlapping, because my class names were a bit long.</li>
-</ul>
-<p>Simple fix was to set <code>nrows=5</code>.</p>
 
 
 </section>

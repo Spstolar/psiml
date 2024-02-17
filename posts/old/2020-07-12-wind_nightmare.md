@@ -2,9 +2,10 @@
 aliases:
 - /markdown/2020/07/12/wind_nightmare
 categories:
-- markdown
+- notebooks
+- virtualenv
 date: '2020-07-12'
-description: A minimal example of using markdown with fastpages.
+description: Headaches with virtualenvs
 layout: post
 title: Solving a Nightmare with a Headache
 toc: true

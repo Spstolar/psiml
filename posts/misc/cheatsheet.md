@@ -1,6 +1,7 @@
 ---
 title: Common Command and Setup Cheatsheet
 date: 2022-02-12
+description: Things I forget!
 ---
 
 # Common Command and Setup Cheatsheet

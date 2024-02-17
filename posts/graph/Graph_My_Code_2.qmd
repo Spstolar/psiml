@@ -1,9 +1,9 @@
 ---
 title: "Graph My Code 2: Visualizing Function Dependencies in Python"
 date: "2023-09-24"
+description: Writing code that visualizes code.
 ---
 
-Writing code that visualizes code.
 
 ## Intro
 

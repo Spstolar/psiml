@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2023-09-16">
+<meta name="description" content="Using Python’s AST to build graph visualization of code.">
 
 <title>ψML - Graph My Code 1: Creating a Graph of Function Dependencies in Python</title>
 <style>
@@ -158,7 +159,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Graph My Code 1: Creating a Graph of Function Dependencies in Python</h1>
-                      </div>
+                  <div>
+        <div class="description">
+          Using Python’s AST to build graph visualization of code.
+        </div>
+      </div>
+                </div>
   </div>
     
   
@@ -187,7 +193,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>Using Python’s <code>ast</code> to build graph visualizations of Python code.</p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>In the previous entry, we found connections between different Python scripts manually. We iterated through lines of code with a simple check for lines that began with something like <code>from x import</code> or <code>import x</code>. This works fine for getting an idea of module dependencies, but if we begin to ask questions like “what functions are imported” and “what are our dependencies per function” then the complexity begins to increase.</p>

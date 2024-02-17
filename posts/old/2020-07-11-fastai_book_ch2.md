@@ -2,9 +2,9 @@
 aliases:
 - /markdown/2020/07/11/fastai_book_ch2
 categories:
-- markdown
+- ai
 date: '2020-07-11'
-description: A minimal example of using markdown with fastpages.
+description: Simple construction of image classifiers.
 layout: post
 title: FastAI Book Chapter 2
 toc: true

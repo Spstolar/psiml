@@ -2,9 +2,9 @@
 aliases:
 - /markdown/2020/07/23/data_objects
 categories:
-- markdown
+- pytorch
 date: '2020-07-23'
-description: A minimal example of using markdown with fastpages.
+description: Data classes.
 layout: post
 title: DataPlox
 toc: true

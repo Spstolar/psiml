@@ -1,6 +1,7 @@
 ---
 title: Getting Quarto Running from WSL
 date: 2024-02-17
+description: Some notes on developing a blog in Quarto.
 ---
 
 # Install Quarto

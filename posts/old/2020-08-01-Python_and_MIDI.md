@@ -2,7 +2,7 @@
 aliases:
 - /markdown/2020/08/01/Python_and_MIDI
 categories:
-- markdown
+- music
 date: '2020-08-01'
 description: A minimal example of using markdown with fastpages.
 layout: post

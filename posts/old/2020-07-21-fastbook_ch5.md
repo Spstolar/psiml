@@ -2,9 +2,9 @@
 aliases:
 - /markdown/2020/07/21/fastbook_ch5
 categories:
-- markdown
+- ai
 date: '2020-07-21'
-description: A minimal example of using markdown with fastpages.
+description: Notes on FastBook.
 layout: post
 title: FastBook Chapter 5 Thoughts
 toc: true

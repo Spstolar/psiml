@@ -2,9 +2,10 @@
 aliases:
 - /fastpages/2020/08/09/circulants_and_DFT
 categories:
-- fastpages
+- matrices
+- fourier
 date: '2020-08-09'
-description: Awesome description
+description: Circulant Matrices and DFT
 hide: false
 image: images/circulant_ex_1.svg
 layout: post

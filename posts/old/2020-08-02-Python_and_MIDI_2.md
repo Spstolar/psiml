@@ -2,16 +2,14 @@
 aliases:
 - /markdown/2020/08/02/Python_and_MIDI_2
 categories:
-- markdown
+- music
 date: '2020-08-02'
-description: A minimal example of using markdown with fastpages.
+description: Creating random music.
 layout: post
 title: Make More Interesting Random Music
 toc: true
 
 ---
-
-# Make More Interesting Random Music
 
 We saw last time that it is simple to construct a MIDI file with the `pretty_midi` package. Now to make something a little more musically interesting than alternating between two notes we need to randomly generate notes to play using some basic music theory to make things sound "good." To do this we will:
 
