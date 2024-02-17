@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/misc/quarto_preview.html",
       "/posts/graph/Graph_My_Code_2.html",
       "/posts/graph/Graph_My_Code_1.html",
       "/posts/graph/mermaid.html",
