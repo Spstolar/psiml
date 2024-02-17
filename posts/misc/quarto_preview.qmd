@@ -1,0 +1,33 @@
+---
+title: getting quarto running
+date: 2024-02-17
+---
+
+`wget` on the download link for Ubuntu [here](https://quarto.org/docs/get-started/).
+
+Then we have these steps:
+
+1. Navigate to the Directory Containing the .deb File: Use the cd command to change to the directory where your .deb file is located. If the file is in a Windows directory, you can access it from WSL by navigating to /mnt/c (if the file is on the C: drive) followed by the path to the file's location.
+2. Install the .deb Package: Once you are in the directory with the .deb file, you can install the package using the dpkg command. If the file name is example.deb, you would use the following command:
+
+```bash
+sudo dpkg -i example.deb
+```
+
+The sudo command is used to execute the command with superuser privileges, which are usually required for installing packages. The -i option tells dpkg to install the package.
+
+Resolve Dependencies: If the package installation reports missing dependencies, you can attempt to automatically fix this by running:
+
+```bash
+sudo apt-get install -f
+```
+
+This command tells APT (the Advanced Package Tool) to fix broken dependencies by downloading and installing any missing packages.
+
+Verify Installation: After the installation process completes, you can verify the installation by checking the version of the installed package or by running the application. The specific command for verification will depend on the package you installed.
+
+## Open a chrome browser from WSL:
+
+This is one way to do it, though the interace is a bit janky:
+
+https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps

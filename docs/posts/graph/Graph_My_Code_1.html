@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,6 +97,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -107,10 +114,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">ψML</span>
     </a>
@@ -122,27 +129,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../header/refs.html" rel="" target="">
- <span class="menu-text">Refs</span></a>
+    <a class="nav-link" href="../../header/refs.html"> 
+<span class="menu-text">Refs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../header/nvim.html" rel="" target="">
- <span class="menu-text">nvim</span></a>
+    <a class="nav-link" href="../../header/nvim.html"> 
+<span class="menu-text">nvim</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/spstolar" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/spstolar"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -179,6 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+
 <p>Using Python’s <code>ast</code> to build graph visualizations of Python code.</p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
@@ -201,17 +209,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="explore-ast" class="level2">
 <h2 class="anchored" data-anchor-id="explore-ast">Explore <code>ast</code></h2>
 <p>First, here’s what Python version I’m using (syntax can change from version to version, so this may not work exactly the same):</p>
-<div class="cell" data-execution_count="1">
+<div id="b6938268-1567-4215-a576-d1e3209c9935" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python3 <span class="op">-</span>V</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Python 3.8.10</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="2">
+<div id="f180a26e-3c29-41b6-8399-3486f4b2037d" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is some example code:</p>
-<div class="cell" data-execution_count="3">
+<div id="c646d645-e314-408c-bfac-348a8a401e82" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>main.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>from worker import do_stuff
@@ -222,19 +230,19 @@ do_stuff()</code></pre>
 <section id="parse" class="level3">
 <h3 class="anchored" data-anchor-id="parse">Parse</h3>
 <p>To use <code>ast</code>, begin by reading in the content of a file and then use <code>ast.parse</code>:</p>
-<div class="cell" data-execution_count="4">
+<div id="6e691a2c-771b-405a-ad4e-6a1b13482b2a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>example_script <span class="op">=</span> <span class="bu">open</span>(<span class="st">"example/main.py"</span>, <span class="st">"r"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>parsed_script <span class="op">=</span> ast.parse(example_script.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This produces a nested syntax tree. Here the entire module is the top level:</p>
-<div class="cell" data-execution_count="5">
+<div id="1cce9c04-28d0-42cb-b138-ece73c770a56" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>parsed_script</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>&lt;_ast.Module at 0x7ffb14597430&gt;</code></pre>
 </div>
 </div>
 <p>Then its <code>.body</code> has the contents, and import line and some expression:</p>
-<div class="cell" data-execution_count="6">
+<div id="db41b9e7-0e41-4af3-890f-b9e426de1760" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>parsed_script.body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>[&lt;_ast.ImportFrom at 0x7ffb1459ce80&gt;, &lt;_ast.Expr at 0x7ffb1454f430&gt;]</code></pre>
@@ -244,12 +252,12 @@ do_stuff()</code></pre>
 <section id="walk" class="level3">
 <h3 class="anchored" data-anchor-id="walk">Walk</h3>
 <p>The nested elements keeps going until you hit the lowest levels of names of variables. You can see the full collection of elements with <code>.walk</code> to walk all paths of the syntax tree:</p>
-<div class="cell" data-execution_count="7">
+<div id="6f1a27a6-ad20-482e-ae80-d2879b092d83" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>walked_script <span class="op">=</span> ast.walk(parsed_script)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>w_l <span class="op">=</span> <span class="bu">list</span>(walked_script)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>These are all the nodes:</p>
-<div class="cell" data-execution_count="8">
+<div id="e49d6bb3-6a5d-4a60-ab89-12951adc2793" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>w_l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>[&lt;_ast.Module at 0x7ffb14597430&gt;,
@@ -266,10 +274,10 @@ do_stuff()</code></pre>
 <section id="module-node" class="level3">
 <h3 class="anchored" data-anchor-id="module-node">Module Node</h3>
 <p>First is a node for a Python module that we saw at the top level of the object returned from <code>.parse</code>:</p>
-<div class="cell" data-execution_count="9">
+<div id="26dda2c2-75af-4115-9dc0-f2549cda5136" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>module_node <span class="op">=</span> w_l[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="10">
+<div id="6c9c9b88-4597-4bc2-911c-faae7b3a6d34" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>module_node.body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>[&lt;_ast.ImportFrom at 0x7ffb1459ce80&gt;, &lt;_ast.Expr at 0x7ffb1454f430&gt;]</code></pre>
@@ -279,25 +287,25 @@ do_stuff()</code></pre>
 <section id="importfrom-node" class="level3">
 <h3 class="anchored" data-anchor-id="importfrom-node">ImportFrom Node</h3>
 <p>The <code>ImportFrom</code> node is specifically for imports structured like <code>from x import y</code>.</p>
-<div class="cell" data-execution_count="11">
+<div id="242216d6-9d94-465f-8e37-bb54fd48cab3" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>import_from_node <span class="op">=</span> w_l[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can get the module name</p>
-<div class="cell" data-execution_count="12">
+<div id="03e15cbc-ab0d-4ded-8a1b-32c51bd206fe" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>import_from_node.module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>'worker'</code></pre>
 </div>
 </div>
 <p>and a list of the imported functions</p>
-<div class="cell" data-execution_count="13">
+<div id="bc445f92-bab8-4a07-be63-c2dbf1ebdd44" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>import_from_node.names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>[&lt;_ast.alias at 0x7ffb1454f340&gt;]</code></pre>
 </div>
 </div>
 <p>whose names we can access with the <code>.name</code> attribute</p>
-<div class="cell" data-execution_count="14">
+<div id="7ccff918-4940-44af-bc92-bdb9bd2f40e4" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>import_from_node.names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>'do_stuff'</code></pre>
@@ -308,7 +316,7 @@ do_stuff()</code></pre>
 <section id="call-nodes" class="level3">
 <h3 class="anchored" data-anchor-id="call-nodes">Call Nodes</h3>
 <p>Function calls are in <code>Call</code> nodes:</p>
-<div class="cell" data-execution_count="15">
+<div id="19a86a6a-ff72-494f-b912-3b238f066761" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>call_node <span class="op">=</span> w_l[<span class="op">-</span><span class="dv">3</span>]</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>call_node</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
@@ -316,19 +324,19 @@ do_stuff()</code></pre>
 </div>
 </div>
 <p>We can get the arguments of the function, the line number where the call was made, and the name of the function being called:</p>
-<div class="cell" data-execution_count="16">
+<div id="d36f9178-7f89-4f5d-b487-a9310a30cb50" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>call_node.args</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>[]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
+<div id="d8b09014-ec0b-4bc9-9ce8-32c653fa4b6f" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>call_node.lineno</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>3</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="18">
+<div id="bdb3e692-58ae-4a42-aad8-c86e5e445da1" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>call_node.func.<span class="bu">id</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>'do_stuff'</code></pre>
@@ -339,7 +347,7 @@ do_stuff()</code></pre>
 <section id="start-crawling-code" class="level2">
 <h2 class="anchored" data-anchor-id="start-crawling-code">Start Crawling Code</h2>
 <p>Use a function to generate a walked list of AST elements given a script name:</p>
-<div class="cell" data-execution_count="19">
+<div id="e5ed1b46-7f50-4f55-b033-a9756bc55a9b" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> walk_script(filename):</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    worker_script <span class="op">=</span> <span class="bu">open</span>(filename, <span class="st">"r"</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    parsed_worker <span class="op">=</span> ast.parse(worker_script.read())</span>
@@ -347,10 +355,10 @@ do_stuff()</code></pre>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    work_w <span class="op">=</span> <span class="bu">list</span>(walked_worker)</span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> work_w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="20">
+<div id="e5bed594-94b3-4796-add5-f33500e20244" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>work_w <span class="op">=</span> walk_script(<span class="st">"example/worker.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="21">
+<div id="ed96ae61-aad6-4952-85ca-6bec2373e6f4" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>worker.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>from helper_1 import greeting
@@ -360,7 +368,7 @@ def do_stuff():
     print(f"{greeting()}, {name()}!")</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="22">
+<div id="473eb997-4430-4993-873b-c2b7d9a96dd1" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>work_w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>[&lt;_ast.Module at 0x7ffb144f1c70&gt;,
@@ -388,13 +396,13 @@ def do_stuff():
 </div>
 </div>
 <p>If we start at the top, the module node tells us this code consists of two import lines and a function definition:</p>
-<div class="cell" data-execution_count="23">
+<div id="210d40e2-a0d2-4714-99ae-c1a26fbbe319" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>&lt;_ast.Module at 0x7ffb144f1c70&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="24">
+<div id="f7cd2e73-7b17-4f0d-a539-d6e94782f5db" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>[&lt;_ast.ImportFrom at 0x7ffb144f1fd0&gt;,
@@ -403,13 +411,13 @@ def do_stuff():
 </div>
 </div>
 <p>The names of the imported modules:</p>
-<div class="cell" data-execution_count="25">
+<div id="6308b76b-56a9-4562-987b-cfe6e8b56112" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">0</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>'helper_1'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="26">
+<div id="9f24b80d-8c6c-4990-8436-d74b7fe06126" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">1</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>'helper_2'</code></pre>
@@ -417,7 +425,7 @@ def do_stuff():
 </div>
 <p>We can begin to see how to parse for module and function dependency information. We can used the walked syntax tree and record information about module imports, function calls, and function definitions. Note, if we are crawling the children of <code>FunctionDef</code> then the function being defined has those children as dependencies.</p>
 <p>Part of the power of <code>ast</code> is that our dependency parser is more robust to code that is less well-formatted.</p>
-<div class="cell" data-execution_count="27">
+<div id="57cd3dd9-7709-4d79-a7b1-24fcd92963d4" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>worker_difficult.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>from helper_1 import greeting
@@ -428,11 +436,11 @@ def do_stuff():
 from helper_2 import name</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="28">
+<div id="8af792cb-be32-4afd-b308-39c87b770c80" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>work_w <span class="op">=</span> walk_script(<span class="st">"example/worker_difficult.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The only thing that changes is the order in the body of the module node, the second import is now after the function definition (but not a child of it) and this information is preserved:</p>
-<div class="cell" data-execution_count="29">
+<div id="af4a0675-4f50-4924-b9c2-26cbb4930672" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>[&lt;_ast.ImportFrom at 0x7ffb14505730&gt;,
@@ -450,7 +458,7 @@ from helper_2 import name</code></pre>
 <li>perform a type check on each node and</li>
 <li>extract the information from the node depending on the type</li>
 </ol>
-<div class="cell" data-execution_count="30">
+<div id="7d8cfea3-6f45-41f8-8665-f7a1a5dd7ba9" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>abyss.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>import numpy as np
@@ -475,7 +483,7 @@ def eigs_of_product():
     return eigs</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="31">
+<div id="ef6f3eb9-b1f6-4b04-bf6d-f91fb53a9b2b" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_submodule_desc(value):</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># this helps us handle submodules like the call of `np.linalg.eig` which is using the `linalg` submodule of `numpy`</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    module_call <span class="op">=</span> []</span>
@@ -514,11 +522,11 @@ error_print np.linalg.debug.depth</code></pre>
 <section id="extract-code-info" class="level2">
 <h2 class="anchored" data-anchor-id="extract-code-info">Extract Code Info</h2>
 <p>Do something like the above for each <code>.py</code> file in a directory you want to map out.</p>
-<div class="cell" data-execution_count="32">
+<div id="64fabe25-0b4e-427e-a97d-7e564f25a4ce" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> code_extraction <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We have a simple utility to get all of the Python filenames from a collection of directories, along with separately specified filenames.</p>
-<div class="cell" data-execution_count="33">
+<div id="2ebedc7f-0454-4de0-a6eb-4c722350176b" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>get_all_filenames(directories<span class="op">=</span>[<span class="st">"example"</span>, <span class="st">"example2"</span>], other_python_filenames<span class="op">=</span>[<span class="st">"test.py"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="33">
 <pre><code>[PosixPath('example/main.py'),
@@ -535,28 +543,28 @@ error_print np.linalg.debug.depth</code></pre>
 </div>
 </div>
 <p>We’ll do a deeper dive in the next article, but we can create a module information dictionary by parsing and extracting information from each script.</p>
-<div class="cell" data-execution_count="34">
+<div id="7fc18bcb-9275-44f4-8bd3-ff49da6b2bed" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>m_info <span class="op">=</span> extract_code_information(directories<span class="op">=</span>[<span class="st">"example"</span>, <span class="st">"example2"</span>], other_python_filenames<span class="op">=</span>[<span class="st">"test.py"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="35">
+<div id="4308c48c-5c2b-4441-9caa-21b465805916" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The module names:</p>
-<div class="cell" data-execution_count="36">
+<div id="37581b7a-ae94-4ef0-ac09-32f729e1a40b" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>m_info.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>dict_keys(['main', 'helper_2', 'worker_difficult', 'worker', 'worker_more_difficult', 'helper_1', 'abyss', 'one', 'two', 'lo', 'test'])</code></pre>
 </div>
 </div>
 <p>For each module, we provide the list of imports, function calls, and function definitions:</p>
-<div class="cell" data-execution_count="37">
+<div id="857ad690-a2a1-4ce1-abd2-dc7c2de711a0" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>m_info[<span class="st">"worker"</span>].keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>dict_keys(['import_list', 'call_list', 'func_defs'])</code></pre>
 </div>
 </div>
 <p>Then our extracted information looks something like this:</p>
-<div class="cell" data-execution_count="38">
+<div id="a2b0cde6-12ea-4fb8-91fe-fba58f48ac15" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>pprint(m_info[<span class="st">"worker"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'call_list': [CallNode(module=[], name='print', call_lineno=5, called_by='do_stuff'),
@@ -572,11 +580,11 @@ error_print np.linalg.debug.depth</code></pre>
 <section id="construct-code-graph" class="level2">
 <h2 class="anchored" data-anchor-id="construct-code-graph">Construct Code Graph</h2>
 <p>The module info dictionary <code>m_info</code> contains all the information we need to build up a code graph.</p>
-<div class="cell" data-execution_count="39">
+<div id="b8b36dc0-cc84-4d84-b48b-565598d9359b" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> code_graph <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For each function we can use the call list to create from functions to their parent modules:</p>
-<div class="cell" data-execution_count="40">
+<div id="4f65ab1b-44ac-4ccd-bf24-8a36b68b59c0" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>m_info[<span class="st">"abyss"</span>][<span class="st">"call_list"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>[CallNode(module=['np'], name='zeroes', call_lineno=3, called_by=None),
@@ -590,7 +598,7 @@ error_print np.linalg.debug.depth</code></pre>
  CallNode(module=['np', 'linalg', 'debug', 'depth'], name='error_print', call_lineno=19, called_by='eigs_of_product')]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="41">
+<div id="947e6fb9-e273-4b38-87d5-ccfc56bd3e5b" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>create_function_call_edges_simple(m_info[<span class="st">"abyss"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>[('mul', 'np.array'),
@@ -604,7 +612,7 @@ error_print np.linalg.debug.depth</code></pre>
 </div>
 </div>
 <p>We can see that some functions are called multiple times in the same definition, so we compress this information while keeping track of the number of calls:</p>
-<div class="cell" data-execution_count="42">
+<div id="c13f8f7a-7271-41ce-b617-e1e7a04933a7" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>create_function_call_edges(m_info[<span class="st">"abyss"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>[('mul', 'np.array', 2),
@@ -619,11 +627,11 @@ error_print np.linalg.debug.depth</code></pre>
 <section id="visualize" class="level2">
 <h2 class="anchored" data-anchor-id="visualize">Visualize</h2>
 <p>Finally, we create mermaid graph descriptions of code.</p>
-<div class="cell" data-execution_count="43">
+<div id="dbf9e6d9-c80a-43de-9dbe-42c854eb5f78" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> viz_code <span class="im">import</span> generate_desc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note, had to comment these out because my site generator became very confused about these markdown prints!</p>
-<div class="cell" data-execution_count="44">
+<div id="6576db4c-a12d-4166-ab11-a69ced331e3e" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print(generate_desc(create_function_call_edges_simple(m_info["worker"])))</span></span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ```{mermaid}</span></span>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="co">#graph LR;</span></span>
@@ -632,9 +640,10 @@ error_print np.linalg.debug.depth</code></pre>
 <span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   do_stuff[do_stuff] --&gt; name[name];</span></span>
 <span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
+<p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">graph LR;
     do_stuff[do_stuff] --&gt; print[print];
@@ -642,15 +651,17 @@ error_print np.linalg.debug.depth</code></pre>
     do_stuff[do_stuff] --&gt; name[name];
 </pre>
 </div>
+<p></p></figure><p></p>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="45">
+<div id="8102eb32-3f6d-46bf-a1e1-9ac49c37e64a" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print(generate_desc(create_function_call_edges_simple(m_info["abyss"])))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
+<p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">graph LR;
     mul[mul] --&gt; np.array[np.array];
@@ -663,6 +674,7 @@ error_print np.linalg.debug.depth</code></pre>
     eigs_of_product[eigs_of_product] --&gt; np.linalg.debug.dept[np.linalg.debug.depth.error_print];
 </pre>
 </div>
+<p></p></figure><p></p>
 </div>
 </div>
 </div>
@@ -676,11 +688,11 @@ error_print np.linalg.debug.depth</code></pre>
 <li>inline imports: sometimes you only want to perform an import when you are using a specific function</li>
 <li>aliasing: <code>import numpy as np</code> means we have to track <code>np</code> in the code</li>
 </ul>
-<div class="cell" data-execution_count="46">
+<div id="fbf22e44-dcc9-4a47-bb9d-0759e12c0f29" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>work_w <span class="op">=</span> walk_script(<span class="st">"example/worker_more_difficult.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here we have examples of all the above:</p>
-<div class="cell" data-execution_count="47">
+<div id="bd9f84e9-c661-4aa6-b966-a0eda25ec66a" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>worker_more_difficult.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>from helper_1 import greeting
@@ -701,7 +713,7 @@ from sub.subsub.two import dog</code></pre>
 </div>
 </div>
 <p>we catch the imports outside of function definitions as before</p>
-<div class="cell" data-execution_count="48">
+<div id="870432f0-2acb-4750-8ddb-df40cefa99da" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>module_node <span class="op">=</span> work_w[<span class="dv">0</span>]</span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>module_node.body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="48">
@@ -717,54 +729,54 @@ from sub.subsub.two import dog</code></pre>
  &lt;_ast.ImportFrom at 0x7ffb144b5880&gt;]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="49">
+<div id="f7c361f1-3d65-409f-b6e0-06d424e8e512" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>module_node.body[<span class="dv">0</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>'helper_1'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="50">
+<div id="06b85993-5d9e-4c04-a843-38de2f5b2f37" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>module_node.body[<span class="dv">0</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>'greeting'</code></pre>
 </div>
 </div>
 <p>When we have more than one function being imported:</p>
-<div class="cell" data-execution_count="51">
+<div id="484d5531-cdfb-4d60-8538-ca66abba9d40" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>module_node.body[<span class="dv">1</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>'helper_3'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="52">
+<div id="052bfc76-e7b6-4171-a6a0-65f0f0dadf3f" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>[n.name <span class="cf">for</span> n <span class="kw">in</span> module_node.body[<span class="dv">1</span>].names]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="52">
 <pre><code>['a', 'b', 'c', 'd']</code></pre>
 </div>
 </div>
 <p>Importing everything from a module</p>
-<div class="cell" data-execution_count="53">
+<div id="d5a92e5b-8ede-46c5-921f-8fdaa0083020" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>module_node.body[<span class="dv">2</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>'collections'</code></pre>
 </div>
 </div>
 <p>We can see this is going to be a problem for us to solve. We have no real way of logging the functions we’re bringing in without parsing the entire module:</p>
-<div class="cell" data-execution_count="54">
+<div id="af22d0f8-90e2-4dc0-9a84-ecef7f4243b8" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>module_node.body[<span class="dv">2</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>'*'</code></pre>
 </div>
 </div>
 <p>We can use the <code>.level</code> attribute to determine that something was a relative import (<code>from ..test import say_hello</code>):</p>
-<div class="cell" data-execution_count="55">
+<div id="bcbd13ba-77ef-4cfd-867b-284af92fdac8" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">5</span>].module</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="55">
 <pre><code>'test'</code></pre>
 </div>
 </div>
 <p><code>level</code> is an integer holding the level of the relative import (0 means absolute import)</p>
-<div class="cell" data-execution_count="56">
+<div id="346ea6ae-a078-4127-885c-c3506e1db8c1" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">5</span>].level</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>2</code></pre>
@@ -773,20 +785,20 @@ from sub.subsub.two import dog</code></pre>
 <section id="subdirectory-imports-and-the-import-node" class="level3">
 <h3 class="anchored" data-anchor-id="subdirectory-imports-and-the-import-node">Subdirectory Imports and the <code>Import</code> Node</h3>
 <p>There is actually a distinct node type for module imports with the simpler <code>import x</code> syntax.</p>
-<div class="cell" data-execution_count="57">
+<div id="0c9c2641-fe5e-4e57-8658-8a553036f9c4" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="57">
 <pre><code>&lt;_ast.Import at 0x7ffb144b5670&gt;</code></pre>
 </div>
 </div>
 <p>The unfortunate parts is that this does not have the <code>level</code> attribute, so we will have to manually parse the module names to determine when things were subdirectory imports:</p>
-<div class="cell" data-execution_count="58">
+<div id="4181cb32-a118-4d8f-aefc-5f96d865ae0e" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">6</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="58">
 <pre><code>'sub.one'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="59">
+<div id="53f3fbcb-16d2-41ff-bcbd-01c28e2de8c8" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>work_w[<span class="dv">0</span>].body[<span class="dv">7</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="59">
 <pre><code>'sub.subsub.two'</code></pre>
@@ -800,21 +812,21 @@ from sub.subsub.two import dog</code></pre>
 <span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> re</span>
 <span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> talk <span class="im">as</span> tk</span>
 <span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>greeting()<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>name<span class="op">!</span><span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell" data-execution_count="60">
+<div id="5eb99916-c884-4d46-9814-291b43e42f74" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>cool_function <span class="op">=</span> work_w[<span class="dv">0</span>].body[<span class="dv">3</span>]</span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>cool_function</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="60">
 <pre><code>&lt;_ast.FunctionDef at 0x7ffb144b5040&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="61">
+<div id="107c63d9-b369-4a9f-b7b3-e8fd475e96a9" class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>cool_function.name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="61">
 <pre><code>'do_stuff'</code></pre>
 </div>
 </div>
 <p>As with the module node, we can see these imports in the body of the function definition node:</p>
-<div class="cell" data-execution_count="62">
+<div id="f3d38c6a-8d90-4936-b30d-1fa55ab1a1f6" class="cell" data-execution_count="62">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>cool_function.body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="62">
 <pre><code>[&lt;_ast.Import at 0x7ffb144b50d0&gt;,
@@ -822,19 +834,19 @@ from sub.subsub.two import dog</code></pre>
  &lt;_ast.Expr at 0x7ffb144b5280&gt;]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="63">
+<div id="157027c1-4993-4c31-92af-44552b3653d8" class="cell" data-execution_count="63">
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>cool_function.body[<span class="dv">0</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>'re'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="64">
+<div id="29be68e7-0958-4264-abb3-f06fc701d1f3" class="cell" data-execution_count="64">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>cool_function.body[<span class="dv">1</span>].names[<span class="dv">0</span>].name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="64">
 <pre><code>'talk'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="65">
+<div id="dcfb60f7-8d44-42e7-91de-c6c8d82e90d2" class="cell" data-execution_count="65">
 <div class="sourceCode cell-code" id="cb114"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>cool_function.body[<span class="dv">1</span>].names[<span class="dv">0</span>].asname</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="65">
 <pre><code>'tk'</code></pre>
@@ -847,7 +859,7 @@ from sub.subsub.two import dog</code></pre>
 <p>Next we need to better understand how to unpack the information in a <code>Call</code> node.</p>
 <section id="trace-uses" class="level3">
 <h3 class="anchored" data-anchor-id="trace-uses">Trace Uses</h3>
-<div class="cell" data-execution_count="66">
+<div id="679efb43-fe8f-43ec-ae75-d7979e226d17" class="cell" data-execution_count="66">
 <div class="sourceCode cell-code" id="cb116"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat example<span class="op">/</span>abyss.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>import numpy as np
@@ -872,20 +884,20 @@ def eigs_of_product():
     return eigs</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="67">
+<div id="4ff75fd8-c255-4fe4-b1c1-ee410eb788a5" class="cell" data-execution_count="67">
 <div class="sourceCode cell-code" id="cb118"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>work_w <span class="op">=</span> walk_script(<span class="st">"example/abyss.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="68">
+<div id="e400d4e6-e909-4582-bee1-f575a0bf2dc8" class="cell" data-execution_count="68">
 <div class="sourceCode cell-code" id="cb119"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We build a counter of node types:</p>
-<div class="cell" data-execution_count="69">
+<div id="60d00b97-9c26-4300-8335-7b948f8cc83e" class="cell" data-execution_count="69">
 <div class="sourceCode cell-code" id="cb120"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>type_counter <span class="op">=</span> Counter()</span>
 <span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> node <span class="kw">in</span> work_w:</span>
 <span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>    type_counter[<span class="bu">type</span>(node)] <span class="op">+=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>From this (comparing how many times we used <code>np</code> in the script to these counts), we can tell that the information about the <code>numpy</code> calls are found in nodes with type <code>_ast.Call</code></p>
-<div class="cell" data-execution_count="70">
+<div id="51fd9b10-dd9e-4270-8095-a3d247760503" class="cell" data-execution_count="70">
 <div class="sourceCode cell-code" id="cb121"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>type_counter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="70">
 <pre><code>Counter({_ast.Module: 1,
@@ -906,10 +918,10 @@ def eigs_of_product():
 </div>
 </div>
 <p>So, we grab just the calls like this:</p>
-<div class="cell" data-execution_count="71">
+<div id="39def103-c95c-4882-b12a-f78c768a5087" class="cell" data-execution_count="71">
 <div class="sourceCode cell-code" id="cb123"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>calls <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> work_w <span class="cf">if</span> <span class="bu">isinstance</span>(n, ast.Call)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="72">
+<div id="87cadb45-7d18-4ee9-8710-011c7ebdee27" class="cell" data-execution_count="72">
 <div class="sourceCode cell-code" id="cb124"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a>calls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="72">
 <pre><code>[&lt;_ast.Call at 0x7ffb144f1b20&gt;,
@@ -924,122 +936,122 @@ def eigs_of_product():
 </div>
 </div>
 <p>This is the basic structure of the call data:</p>
-<div class="cell" data-execution_count="73">
+<div id="7cf986db-276c-4fef-b196-45f5bb6b45ae" class="cell" data-execution_count="73">
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>calls[<span class="dv">0</span>].func.value.<span class="bu">id</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="73">
 <pre><code>'np'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="74">
+<div id="177bfd31-6a84-4b1c-ad5d-8292f9d16389" class="cell" data-execution_count="74">
 <div class="sourceCode cell-code" id="cb128"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>calls[<span class="dv">0</span>].func.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="74">
 <pre><code>'zeroes'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="75">
+<div id="bbba69b5-af0d-4e2d-97e8-3fd50d096264" class="cell" data-execution_count="75">
 <div class="sourceCode cell-code" id="cb130"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>calls[<span class="dv">0</span>].func.value.lineno</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="75">
 <pre><code>3</code></pre>
 </div>
 </div>
 <p>Nested calls (using a submodule, like when we use <code>np.linalg.eigs</code>) require different handling</p>
-<div class="cell" data-execution_count="76">
+<div id="761e6c7e-c06a-4d15-bc33-88ee5781a836" class="cell" data-execution_count="76">
 <div class="sourceCode cell-code" id="cb132"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>call <span class="op">=</span> calls[<span class="op">-</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="77">
+<div id="201de4e7-2ccd-4b1a-aad1-12df3568c45f" class="cell" data-execution_count="77">
 <div class="sourceCode cell-code" id="cb133"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>function <span class="op">=</span> call.func</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="78">
+<div id="7e3f38bb-a91f-4a86-a6c3-a140f33853f2" class="cell" data-execution_count="78">
 <div class="sourceCode cell-code" id="cb134"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>function</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="78">
 <pre><code>&lt;_ast.Attribute at 0x7ffb1458a340&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="79">
+<div id="6be55067-4711-489d-bedb-dbc78cb8f206" class="cell" data-execution_count="79">
 <div class="sourceCode cell-code" id="cb136"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>function.value.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="79">
 <pre><code>'linalg'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="80">
+<div id="1f143cb9-024c-4103-9f20-437aca67776a" class="cell" data-execution_count="80">
 <div class="sourceCode cell-code" id="cb138"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>function.value.value.<span class="bu">id</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="80">
 <pre><code>'np'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="81">
+<div id="54cd7cc2-8eaf-44fa-97aa-084338cf7866" class="cell" data-execution_count="81">
 <div class="sourceCode cell-code" id="cb140"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a>function.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="81">
 <pre><code>'eigs'</code></pre>
 </div>
 </div>
 <p>As do deeply nested calls (<code>np.linalg.debug.depth.error_print(eigs)</code>)</p>
-<div class="cell" data-execution_count="82">
+<div id="613567b1-6790-479e-b660-f1a54e7bf63d" class="cell" data-execution_count="82">
 <div class="sourceCode cell-code" id="cb142"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>call <span class="op">=</span> calls[<span class="op">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="83">
+<div id="065220ed-9067-4c80-945d-e9f46550d050" class="cell" data-execution_count="83">
 <div class="sourceCode cell-code" id="cb143"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a>function <span class="op">=</span> call.func</span>
 <span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a>function</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="83">
 <pre><code>&lt;_ast.Attribute at 0x7ffb1458a670&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="84">
+<div id="551199a1-f390-4625-a873-bb33849eb7df" class="cell" data-execution_count="84">
 <div class="sourceCode cell-code" id="cb145"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a>function.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="84">
 <pre><code>'error_print'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="85">
+<div id="94a944a1-bee7-456e-b0f9-7498c172b501" class="cell" data-execution_count="85">
 <div class="sourceCode cell-code" id="cb147"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>function.value.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="85">
 <pre><code>'depth'</code></pre>
 </div>
 </div>
 <p>you just keep grabbing <code>.value</code> until the type changes from <code>ast.Attribute</code> to <code>ast.Name</code></p>
-<div class="cell" data-execution_count="86">
+<div id="00e5b4ff-2fff-4164-85fe-a30eabdd10cf" class="cell" data-execution_count="86">
 <div class="sourceCode cell-code" id="cb149"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>function.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="86">
 <pre><code>&lt;_ast.Attribute at 0x7ffb1458ad60&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="87">
+<div id="939d3eee-377d-4018-a08f-d8cd79917d03" class="cell" data-execution_count="87">
 <div class="sourceCode cell-code" id="cb151"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a>function.value.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="87">
 <pre><code>&lt;_ast.Attribute at 0x7ffb1458a700&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="88">
+<div id="b27d71c2-7141-47fd-a185-e2291e2365a4" class="cell" data-execution_count="88">
 <div class="sourceCode cell-code" id="cb153"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a>function.value.value.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="88">
 <pre><code>'debug'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="89">
+<div id="a61cc7ac-3401-4168-918c-310f0a701809" class="cell" data-execution_count="89">
 <div class="sourceCode cell-code" id="cb155"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a>function.value.value.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="89">
 <pre><code>&lt;_ast.Attribute at 0x7ffb1458a730&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="90">
+<div id="92013793-e683-4d83-b9c4-625fb6305668" class="cell" data-execution_count="90">
 <div class="sourceCode cell-code" id="cb157"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a>function.value.value.value.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="90">
 <pre><code>'linalg'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="91">
+<div id="c2d058de-7e63-498c-bcef-3f99c5e5506d" class="cell" data-execution_count="91">
 <div class="sourceCode cell-code" id="cb159"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a>function.value.value.value.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="91">
 <pre><code>&lt;_ast.Name at 0x7ffb1458aca0&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="92">
+<div id="1974dcf1-7cfe-4ecf-8cc7-f5c9fcb7c39a" class="cell" data-execution_count="92">
 <div class="sourceCode cell-code" id="cb161"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a>function.value.value.value.value.<span class="bu">id</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="92">
 <pre><code>'np'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="93">
+<div id="edd40ee0-0cdf-442d-8e9d-6c67a71b8bc0" class="cell" data-execution_count="93">
 <div class="sourceCode cell-code" id="cb163"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a>function.attr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="93">
 <pre><code>'error_print'</code></pre>
@@ -1093,6 +1105,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1161,13 +1200,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'alternate';
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1246,10 +1287,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1259,8 +1299,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1273,6 +1322,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1316,6 +1484,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1341,6 +1510,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1401,6 +1596,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
