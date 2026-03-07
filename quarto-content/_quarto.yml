@@ -1,11 +1,13 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: ../public/quarto
   preview:
     port: 7777
 
 website:
   title: "\u03C8ML"
+  site-url: "https//simonstolarczyk.com/quarto"
+  site-path: "/quarto/"
   navbar:
     right:
       - about.qmd

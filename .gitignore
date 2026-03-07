@@ -1,3 +1,23 @@
-_site/
 
-/.quarto/
+# Astro / Build Output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Quarto ---
+quarto-content/.quarto/
+docs/
+_site/
+# make sure the rendered output is not ignored
+!public/quarto/
+
+# OS-specific
+.DS_Store
